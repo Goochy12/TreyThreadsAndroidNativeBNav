@@ -1,5 +1,6 @@
 package au.com.scroogetech.treythreadsandroidnativebnav;
 
+import android.app.Fragment;
 import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -38,6 +39,11 @@ public class Home extends AppCompatActivity {
                     cartItem.setIcon(R.drawable.cartdefault);
                     contactItem.setIcon(R.drawable.contactdefault);
 
+                    //load home fragment
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragmentLayout,new HomeFragment())
+                            .commit();
+
                     return true;
                 case R.id.navigation_store:
                     //mTextMessage.setText("Store");
@@ -49,6 +55,11 @@ public class Home extends AppCompatActivity {
                     homeItem.setIcon(R.drawable.homedefault);
                     cartItem.setIcon(R.drawable.cartdefault);
                     contactItem.setIcon(R.drawable.contactdefault);
+
+                    //load store fragment
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragmentLayout,new StoreFragment())
+                            .commit();
 
                     return true;
                 case R.id.navigation_cart:
@@ -62,6 +73,11 @@ public class Home extends AppCompatActivity {
                     storeItem.setIcon(R.drawable.storedefault);
                     contactItem.setIcon(R.drawable.contactdefault);
 
+                    //load cart fragment
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragmentLayout,new CartFragment())
+                            .commit();
+
                     return true;
                 case R.id.navigation_contact:
                     //mTextMessage.setText("Contact");
@@ -74,6 +90,10 @@ public class Home extends AppCompatActivity {
                     storeItem.setIcon(R.drawable.storedefault);
                     cartItem.setIcon(R.drawable.cartdefault);
 
+                    //load contact fragment
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragmentLayout,new ContactFragment())
+                            .commit();
 
                     return true;
             }
@@ -95,7 +115,7 @@ public class Home extends AppCompatActivity {
 
         //HomeFragment homeFragment = HomeFragment.newInstance("param1","param2");
         getSupportFragmentManager().beginTransaction()
-        .add(R.id.fragmentLayout,new HomeFragment())
+        .replace(R.id.fragmentLayout,new HomeFragment())
         .commit();
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
