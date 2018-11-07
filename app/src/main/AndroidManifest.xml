@@ -14,7 +14,7 @@
         <activity
             android:name=".Home"
             android:label="@string/app_name"
-            android:theme="@style/TreyThreadsTheme">
+            android:theme="@style/TreySplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

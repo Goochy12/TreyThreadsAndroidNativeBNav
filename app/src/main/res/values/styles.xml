@@ -10,4 +10,8 @@
 
     <style name="TreyThreadsTheme" parent="Theme.AppCompat.Light.NoActionBar" />
 
+    <style name="TreySplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@drawable/treysplashtheme</item>
+    </style>
+
 </resources>
