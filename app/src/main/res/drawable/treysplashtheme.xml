@@ -7,7 +7,7 @@
     <item>
         <bitmap
             android:gravity="center"
-            android:src="@drawable/trey"/>
+            android:src="@drawable/treysplash"/>
     </item>
 
 </layer-list>
