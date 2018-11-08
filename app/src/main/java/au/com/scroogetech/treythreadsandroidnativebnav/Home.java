@@ -106,6 +106,7 @@ public class Home extends AppCompatActivity {
         setTheme(R.style.TreySplashTheme);
 
         super.onCreate(savedInstanceState);
+
         setTheme(R.style.TreyThreadsTheme);
         setContentView(R.layout.activity_home);
 
