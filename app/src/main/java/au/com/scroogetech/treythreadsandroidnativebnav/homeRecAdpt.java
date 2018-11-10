@@ -40,6 +40,9 @@ public class homeRecAdpt extends RecyclerView.Adapter<homeRecAdpt.HomeViewHolder
     }
 
 
+
+
+
     //create the view holder
     public static class HomeViewHolder extends RecyclerView.ViewHolder{
         public View itemView;

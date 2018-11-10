@@ -3,7 +3,9 @@ package au.com.scroogetech.treythreadsandroidnativebnav;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,6 +19,10 @@ public class HomeFragment extends Fragment {
     private RecyclerView homeRecycler;
     private RecyclerView.Adapter homeRecyclerAdapter;
     private RecyclerView.LayoutManager homeRecyclerLayoutManager;
+
+    private Parcelable recLayoutState;
+    private Bundle recBundle;
+    private static String LIST_STATE = "LIST_STATE";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -39,10 +45,40 @@ public class HomeFragment extends Fragment {
         homeRecyclerLayoutManager = new LinearLayoutManager(getActivity());
         homeRecycler.setLayoutManager(homeRecyclerLayoutManager);
 
-        String[] data = {"1","2","3"};
+        String[] data = {"1","2","3","4","5","6","7","8","9","10"};
         //specify adapter
         homeRecyclerAdapter = new homeRecAdpt(data);
         homeRecycler.setAdapter(homeRecyclerAdapter);
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState){
+        super.onSaveInstanceState(outState);
+        setRetainInstance(true);
+
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+
+        recLayoutState = homeRecyclerLayoutManager.onSaveInstanceState();
+        recBundle = new Bundle();
+        recBundle.putParcelable(LIST_STATE,recLayoutState);
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+
+        if (recBundle != null){
+            recLayoutState = recBundle.getParcelable(LIST_STATE);
+            homeRecyclerLayoutManager.onRestoreInstanceState(recLayoutState);
+        }
+
+
+    }
+
+
 
 }
