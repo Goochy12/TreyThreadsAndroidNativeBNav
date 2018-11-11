@@ -14,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import java.net.URL;
+
 
 public class HomeFragment extends Fragment {
 
@@ -51,14 +53,25 @@ public class HomeFragment extends Fragment {
         homeRecyclerLayoutManager = new LinearLayoutManager(getActivity());
         homeRecycler.setLayoutManager(homeRecyclerLayoutManager);
 
-        String[] data = {"1","2","3","4","5","6","7","8","9","10"};
+        String[] productList = loadData();
+
+        //String[] data = {"1","2","3","4","5","6","7","8","9","10"};
         //specify adapter
-        homeRecyclerAdapter = new homeRecAdpt(data);
+        homeRecyclerAdapter = new homeRecAdpt(productList);
         homeRecycler.setAdapter(homeRecyclerAdapter);
 
 //        if (recLayoutState != null){
 //            Log.i(TAG, "onViewCreated: ");
 //            homeRecyclerLayoutManager.onRestoreInstanceState(recLayoutState);
 //        }
+    }
+
+    public String[] loadData(){
+        //URL dbURL = new URL();
+
+        DatabaseHelper dbh = new DatabaseHelper(this);
+
+
+        return databaseAccess.getItemName();
     }
 }
