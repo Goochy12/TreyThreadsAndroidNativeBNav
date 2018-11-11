@@ -1,5 +1,6 @@
 package au.com.scroogetech.treythreadsandroidnativebnav;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -53,10 +54,9 @@ public class homeRecAdpt extends RecyclerView.Adapter<homeRecAdpt.HomeViewHolder
         public HomeViewHolder(View itemView){
             super(itemView);
             this.itemView = itemView;
-            itemText = (TextView) itemView.findViewById(R.id.homeCardText);
+            itemText = (TextView) itemView.findViewById(R.id.homeCardHeading);
             itemImage = (ImageView) itemView.findViewById(R.id.homeCardImage);
         }
     }
-
 
 }

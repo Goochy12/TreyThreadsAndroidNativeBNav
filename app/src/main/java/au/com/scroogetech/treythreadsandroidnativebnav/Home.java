@@ -1,16 +1,12 @@
 package au.com.scroogetech.treythreadsandroidnativebnav;
 
-import android.app.Fragment;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 public class Home extends AppCompatActivity {
 
@@ -18,6 +14,15 @@ public class Home extends AppCompatActivity {
     private MenuItem storeItem;
     private MenuItem cartItem;
     private MenuItem contactItem;
+
+    //fragments
+    private FragmentManager fragMan = getSupportFragmentManager();
+    private Fragment homeFrag = new HomeFragment();
+    private Fragment storeFrag = new StoreFragment();
+    private Fragment cartFrag = new CartFragment();
+    private Fragment contactFrag = new ContactFragment();
+    private Fragment active;
+
 
     private static final String TAG = "Home";
 
@@ -40,9 +45,8 @@ public class Home extends AppCompatActivity {
                     contactItem.setIcon(R.drawable.contactdefault);
 
                     //load home fragment
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragmentLayout,new HomeFragment())
-                            .commit();
+                    fragMan.beginTransaction().hide(active).show(homeFrag).commit();
+                    active = homeFrag;
 
                     return true;
                 case R.id.navigation_store:
@@ -57,9 +61,8 @@ public class Home extends AppCompatActivity {
                     contactItem.setIcon(R.drawable.contactdefault);
 
                     //load store fragment
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragmentLayout,new StoreFragment())
-                            .commit();
+                    fragMan.beginTransaction().hide(active).show(storeFrag).commit();
+                    active = storeFrag;
 
                     return true;
                 case R.id.navigation_cart:
@@ -74,9 +77,8 @@ public class Home extends AppCompatActivity {
                     contactItem.setIcon(R.drawable.contactdefault);
 
                     //load cart fragment
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragmentLayout,new CartFragment())
-                            .commit();
+                    fragMan.beginTransaction().hide(active).show(cartFrag).commit();
+                    active = cartFrag;
 
                     return true;
                 case R.id.navigation_contact:
@@ -91,9 +93,8 @@ public class Home extends AppCompatActivity {
                     cartItem.setIcon(R.drawable.cartdefault);
 
                     //load contact fragment
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragmentLayout,new ContactFragment())
-                            .commit();
+                    fragMan.beginTransaction().hide(active).show(contactFrag).commit();
+                    active = contactFrag;
 
                     return true;
             }
@@ -118,9 +119,12 @@ public class Home extends AppCompatActivity {
 //        fragmentTransaction.commit();
 
         //HomeFragment homeFragment = HomeFragment.newInstance("param1","param2");
-        getSupportFragmentManager().beginTransaction()
-        .replace(R.id.fragmentLayout,new HomeFragment())
-        .commit();
+        fragMan.beginTransaction().add(R.id.fragmentLayout,homeFrag).commit();
+        active = homeFrag;
+
+        fragMan.beginTransaction().add(R.id.fragmentLayout,storeFrag).hide(storeFrag).commit();
+        fragMan.beginTransaction().add(R.id.fragmentLayout,cartFrag).hide(cartFrag).commit();
+        fragMan.beginTransaction().add(R.id.fragmentLayout,contactFrag).hide(contactFrag).commit();
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);

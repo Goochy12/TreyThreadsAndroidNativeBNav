@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,11 @@ public class HomeFragment extends Fragment {
     private Parcelable recLayoutState;
     private Bundle recBundle;
     private static String LIST_STATE = "LIST_STATE";
+    private static String TAG = "LIST_STATE";
+
+    public HomeFragment(){
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,36 +55,10 @@ public class HomeFragment extends Fragment {
         //specify adapter
         homeRecyclerAdapter = new homeRecAdpt(data);
         homeRecycler.setAdapter(homeRecyclerAdapter);
+
+//        if (recLayoutState != null){
+//            Log.i(TAG, "onViewCreated: ");
+//            homeRecyclerLayoutManager.onRestoreInstanceState(recLayoutState);
+//        }
     }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState){
-        super.onSaveInstanceState(outState);
-        setRetainInstance(true);
-
-    }
-
-    @Override
-    public void onPause(){
-        super.onPause();
-
-        recLayoutState = homeRecyclerLayoutManager.onSaveInstanceState();
-        recBundle = new Bundle();
-        recBundle.putParcelable(LIST_STATE,recLayoutState);
-    }
-
-    @Override
-    public void onResume(){
-        super.onResume();
-
-        if (recBundle != null){
-            recLayoutState = recBundle.getParcelable(LIST_STATE);
-            homeRecyclerLayoutManager.onRestoreInstanceState(recLayoutState);
-        }
-
-
-    }
-
-
-
 }
