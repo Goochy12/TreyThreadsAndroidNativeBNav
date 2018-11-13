@@ -14,7 +14,7 @@ public class StockDBAccess {
     Cursor cursor = null;
 
     private StockDBAccess(Context context){
-        this.openHelper = new DatabaseHelper(context);
+        this.openHelper = new StoreDatabaseHelper(context);
 
     }
 

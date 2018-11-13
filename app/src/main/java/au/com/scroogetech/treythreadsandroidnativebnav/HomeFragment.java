@@ -1,20 +1,14 @@
 package au.com.scroogetech.treythreadsandroidnativebnav;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-
-import java.net.URL;
 
 
 public class HomeFragment extends Fragment {
@@ -53,9 +47,22 @@ public class HomeFragment extends Fragment {
         homeRecyclerLayoutManager = new LinearLayoutManager(getActivity());
         homeRecycler.setLayoutManager(homeRecyclerLayoutManager);
 
-        String[] productList = loadData();
+        //String[] productList = loadData();
+        String[] productList = {"New Stock", "Selling Fast", "Social Media"};
 
-        //String[] data = {"1","2","3","4","5","6","7","8","9","10"};
+
+        HomeDatabaseHelper dbHelper = new HomeDatabaseHelper(getActivity());
+//        dbHelper.openDatabase();
+//        dbHelper.getReadableDatabase();
+
+        int products = dbHelper.getItemCount();
+        Log.i("PRODUCTS", "onViewCreated: " + products);
+        productList = dbHelper.getItemList();
+        for (int i = 0; i < productList.length;i++){
+            Log.i("PRODUCTS", ""+productList[i]);
+        }
+
+        //String[] productList = {"1","2","3","4","5","6","7","8","9","10"};
         //specify adapter
         homeRecyclerAdapter = new homeRecAdpt(productList);
         homeRecycler.setAdapter(homeRecyclerAdapter);
@@ -66,12 +73,12 @@ public class HomeFragment extends Fragment {
 //        }
     }
 
-    public String[] loadData(){
+    public void /*String[]*/ loadData(){
         //URL dbURL = new URL();
 
-        DatabaseHelper dbh = new DatabaseHelper(this);
-
-
-        return databaseAccess.getItemName();
+//        StoreDatabaseHelper dbh = new StoreDatabaseHelper(this);
+//
+//
+//        return databaseAccess.getItemName();
     }
 }
