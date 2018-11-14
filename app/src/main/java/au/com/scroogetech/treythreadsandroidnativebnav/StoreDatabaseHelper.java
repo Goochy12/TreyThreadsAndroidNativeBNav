@@ -29,9 +29,16 @@ public class StoreDatabaseHelper extends SQLiteOpenHelper {
     private final static String STOCK_TABLE = "stockitems";
     private final static String STOCK_PROP_TABLE = "stockProperties";
 
-    private final static String STOCK_TABLE_CREATE = "CREATE TABLE " + STOCK_TABLE + " (" +  "_id" + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " + "name" + " TEXT);";
-    private final static String STOCK_PROP_TABLE_CREATE = "CREATE TABLE " + STOCK_PROP_TABLE + " (" +  "_id" + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " + "id INTEGER, " +
+    private final static String STOCK_TABLE_CREATE = "CREATE TABLE " + STOCK_TABLE + " (" +  "_id" + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " + "stockid INTEGER, name TEXT, path TEXT);";
+    private final static String STOCK_PROP_TABLE_CREATE = "CREATE TABLE " + STOCK_PROP_TABLE + " (" +  "_id" + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " + "productid INTEGER, " +
             "size TEXT, colour TEXT)";
+
+    private final static String stockData = "INSERT INTO stockitems (stockid,name,path) values (1,'beanie','products/beanie range.jpg'), " +
+            "(2,'grey_tee','products/Grey Marl circle logo Tee.jpg'), (3,'grey_long','products/grey marl long sleeve .jpg'),(4,'white_tee','TREYOriginalTee.jpeg')";
+
+    private final static String stockProps = "INSERT INTO stockProperties (productid,size,colour) values (1,'M','maroon'), " +
+            "(1,'M','black'), (1,'M','charcoal'), (1,'M','bottle_green'), (2,'M','grey'), (2,'L','grey'), (2,'XL','grey'), (3,'S','grey'), (3,'M','grey'), (3,'L','grey'), " +
+            "(3,'XL','grey'), (4,'M','white'), (4,'L','white');";
 
     public StoreDatabaseHelper(@Nullable Context context) {
         super(context, DB_NAME, null, DB_Version);
@@ -48,6 +55,9 @@ public class StoreDatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(STOCK_TABLE_CREATE);
         db.execSQL(STOCK_PROP_TABLE_CREATE);
+
+        db.execSQL(stockData);
+        db.execSQL(stockProps);
     }
 
     @Override
@@ -57,14 +67,55 @@ public class StoreDatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public int getItemCount(){
+    public int getProductCount(){
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "select * from " + STOCK_TABLE;
-        Log.i("PRODUCT", "getItemCount: ");
         Cursor cursor = db.rawQuery(query,null);
-        Log.i("PRODUCT", "SHIT");
+        Log.i("PRODUCT", "count: " + cursor.getCount());
 
         return cursor.getCount();
+    }
+
+    public String[] getProducts(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "select name from " + STOCK_TABLE;
+        Cursor cursor = db.rawQuery(query,null);
+
+        String[] itemList;
+        itemList = new String[cursor.getCount()];
+        int i = 0;
+
+        if (cursor.moveToFirst()){
+            itemList[i] = cursor.getString(0);
+            i++;
+            while (cursor.moveToNext()){
+                itemList[i] = cursor.getString(0);
+                i++;
+            }
+        }
+
+        return itemList;
+    }
+
+    public String[] getProductImagePath(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "select path from " + STOCK_TABLE;
+        Cursor cursor = db.rawQuery(query,null);
+
+        String[] itemList;
+        itemList = new String[cursor.getCount()];
+        int i = 0;
+
+        if (cursor.moveToFirst()){
+            itemList[i] = cursor.getString(0);
+            i++;
+            while (cursor.moveToNext()){
+                itemList[i] = cursor.getString(0);
+                i++;
+            }
+        }
+
+        return itemList;
     }
 
 //
