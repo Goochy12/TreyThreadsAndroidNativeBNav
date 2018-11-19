@@ -51,7 +51,7 @@ public class StoreFragment extends Fragment {
 
 
         //specify adapter
-        storeRecyclerAdapter = new storeRecAdpt(products, productList, productImagePath);
+        storeRecyclerAdapter = new storeRecAdpt(products, productList, productImagePath, this.getActivity());
         storeRecycler.setAdapter(storeRecyclerAdapter);
 
 //        if (recLayoutState != null){

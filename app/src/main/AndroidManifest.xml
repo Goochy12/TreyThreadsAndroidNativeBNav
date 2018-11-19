@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="au.com.scroogetech.treythreadsandroidnativebnav">
 
+    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/trey"

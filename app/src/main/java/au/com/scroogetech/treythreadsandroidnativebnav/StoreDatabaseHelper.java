@@ -34,7 +34,7 @@ public class StoreDatabaseHelper extends SQLiteOpenHelper {
             "size TEXT, colour TEXT)";
 
     private final static String stockData = "INSERT INTO stockitems (stockid,name,path) values (1,'beanie','products/beanie range.jpg'), " +
-            "(2,'grey_tee','products/Grey Marl circle logo Tee.jpg'), (3,'grey_long','products/grey marl long sleeve .jpg'),(4,'white_tee','TREYOriginalTee.jpeg')";
+            "(2,'grey_tee','products/Grey Marl circle logo Tee.jpg'), (3,'grey_long','products/grey marl long sleeve .jpg'),(4,'white_tee','products/TREYOriginalTee.jpeg')";
 
     private final static String stockProps = "INSERT INTO stockProperties (productid,size,colour) values (1,'M','maroon'), " +
             "(1,'M','black'), (1,'M','charcoal'), (1,'M','bottle_green'), (2,'M','grey'), (2,'L','grey'), (2,'XL','grey'), (3,'S','grey'), (3,'M','grey'), (3,'L','grey'), " +

@@ -10,5 +10,6 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="contactDescStr">If you need help or would like to enquire about a product, please use the form below and we will get back to you as soon as we can.</string>
 
 </resources>
