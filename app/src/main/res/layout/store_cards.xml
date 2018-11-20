@@ -7,7 +7,8 @@
     android:id="@+id/storeCard"
     app:cardCornerRadius="4dp"
     android:layout_gravity="center"
-    android:layout_marginBottom="4dp">
+    android:layout_marginTop="2dp"
+    android:layout_marginBottom="2dp">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
