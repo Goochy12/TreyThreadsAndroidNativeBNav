@@ -5,7 +5,7 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
-@Database(entities = (CartItem.class), version = 1)
+@Database(entities = {CartItem.class}, version = 1)
 public abstract class CartItemDatabase extends RoomDatabase {
     public abstract CartItemDao cartItemDao();
 

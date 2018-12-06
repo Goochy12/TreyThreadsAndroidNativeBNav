@@ -12,14 +12,14 @@ public class CartItem {
     private int itemID;
 
     private String itemName;
-    private String[] itemSizeList;
+    //private String[] itemSizeList;
     private String itemPrice;
     private String itemColour;
 
-    public CartItem(String itemName, String itemColour, String[] itemSizeList, String itemPrice){
+    public CartItem(String itemName, String itemColour, String itemPrice){
         this.itemName = itemName;
         this.itemColour = itemColour;
-        this.itemSizeList = itemSizeList;
+        //this.itemSizeList = itemSizeList;
         this.itemPrice = itemPrice;
     }
 
@@ -39,13 +39,13 @@ public class CartItem {
         this.itemName = itemName;
     }
 
-    public String[] getItemSizeList() {
-        return itemSizeList;
-    }
-
-    public void setItemSizeList(String[] itemSizeList) {
-        this.itemSizeList = itemSizeList;
-    }
+//    public String[] getItemSizeList() {
+//        return itemSizeList;
+//    }
+//
+//    public void setItemSizeList(String[] itemSizeList) {
+//        this.itemSizeList = itemSizeList;
+//    }
 
     public String getItemPrice() {
         return itemPrice;

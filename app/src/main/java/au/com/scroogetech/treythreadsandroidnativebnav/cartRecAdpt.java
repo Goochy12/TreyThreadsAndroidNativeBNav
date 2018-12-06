@@ -1,12 +1,16 @@
 package au.com.scroogetech.treythreadsandroidnativebnav;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,19 +18,21 @@ import com.squareup.picasso.Picasso;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Collections;
+import java.util.List;
+
+import au.com.scroogetech.treythreadsandroidnativebnav.data.CartItem;
 
 public class cartRecAdpt extends RecyclerView.Adapter<cartRecAdpt.cartViewHolder> {
 
-    private int products;
-    private String[] productList;
-    private String[] productImagePath;
+
+
+    private List<CartItem> cartItems = Collections.emptyList();
+    private CartViewModel cartViewModel;
     private Context context;
 
     //constructor
-    public cartRecAdpt(int products, String[] productList, Context context){
-        this.products = products;
-        this.productList = productList;
-        //this.productImagePath = productImagePath;
+    public cartRecAdpt(Context context){
         this.context = context;
     }
 
@@ -38,13 +44,14 @@ public class cartRecAdpt extends RecyclerView.Adapter<cartRecAdpt.cartViewHolder
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.cart_cards,parent,false);
 
         cartViewHolder hVH = new cartViewHolder(v);
+        cartViewModel = ViewModelProviders.of((FragmentActivity) this.context).get(CartViewModel.class);
 
         return hVH;
     }
 
     @Override
     public void onBindViewHolder(@NonNull cartViewHolder holder, int position){
-        holder.itemText.setText(productList[position]);
+        //holder.itemText.setText(productList[position]);
 
 //        new DownloadImageFromInternet((ImageView) findViewById(R.id.image_view))
 //                .execute("https://pbs.twimg.com/profile_images/630285593268752384/iD1MkFQ0.png");
@@ -61,6 +68,8 @@ public class cartRecAdpt extends RecyclerView.Adapter<cartRecAdpt.cartViewHolder
 //            e.printStackTrace();
 //        }
         //holder.itemImage.setImageURI(Uri.parse(productImagePath[position]));
+
+        holder.itemText.setText(cartItems.get(position).getItemName());
     }
 
     public static Drawable LoadImageFromWeb(String url){
@@ -73,18 +82,21 @@ public class cartRecAdpt extends RecyclerView.Adapter<cartRecAdpt.cartViewHolder
         }
     }
 
-
-
-
-
     @Override
     public int getItemCount(){
-        return products;
+        return cartItems.size();
     }
 
+    public void setItems(List<CartItem> cartItems){
+        this.cartItems = cartItems;
+        notifyDataSetChanged();
+    }
 
+    public void hello(){
 
+    }
 
+    public List<CartItem> getUpdatedTasks(){return this.cartItems;}
 
     //create the view holder
     public static class cartViewHolder extends RecyclerView.ViewHolder{
