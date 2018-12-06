@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 
 public class CartFragment extends Fragment {
@@ -14,6 +15,8 @@ public class CartFragment extends Fragment {
     private RecyclerView cartRecycler;
     private RecyclerView.Adapter cartRecyclerAdapter;
     private RecyclerView.LayoutManager cartRecyclerLayoutManager;
+
+    private TextView cartEmptyTextView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -26,6 +29,8 @@ public class CartFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstaceState){
         super.onViewCreated(view, savedInstaceState);
 
+        cartEmptyTextView = (TextView) view.findViewById(R.id.cartEmptyMessage);
+
         //get the recycler
         cartRecycler = (RecyclerView) view.findViewById(R.id.cartRecyclerView);
         //cartRecycler.setHasFixedSize(true);
@@ -37,6 +42,10 @@ public class CartFragment extends Fragment {
         //String[] productList = loadData();
         //String[] productList = {"New Stock", "Selling Fast", "Social Media"};
         String[] productList = {"1","2","3","4","5","6","7","8","9","10"};
+
+        if (productList.length > 0){
+            cartEmptyTextView.setVisibility(view.INVISIBLE);
+        }
 
 
 //        cartDatabaseHelper dbHelper = new cartDatabaseHelper(getActivity());
