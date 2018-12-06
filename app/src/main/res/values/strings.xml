@@ -13,5 +13,6 @@
     <string name="contactDescStr">If you need help or would like to enquire about a product, please use the form below and we will get back to you as soon as we can.</string>
 
     <string name="cart_empty">Your Cart is Empty!</string>
+    <string name="addToCart">Add To Cart!</string>
 
 </resources>

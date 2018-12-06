@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.List;
@@ -27,6 +28,7 @@ public class CartFragment extends Fragment {
     private RecyclerView.LayoutManager cartRecyclerLayoutManager;
 
     private TextView cartEmptyTextView;
+    private Button checkoutButton;
 
     private CartItemDatabase db;
     private CartViewModel cartViewModel;
@@ -39,7 +41,7 @@ public class CartFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstaceState){
+    public void onViewCreated(final View view, Bundle savedInstaceState){
         super.onViewCreated(view, savedInstaceState);
 
         //get the recycler
@@ -60,6 +62,8 @@ public class CartFragment extends Fragment {
 
 
         cartEmptyTextView = (TextView) view.findViewById(R.id.cartEmptyMessage);
+        checkoutButton = (Button) view.findViewById(R.id.checkoutButton);
+
         cartViewModel = ViewModelProviders.of((FragmentActivity) this.getContext()).get(CartViewModel.class);
         cartViewModel.getAllItems().observe(this, new Observer<List<CartItem>>() {
             @Override
@@ -67,8 +71,10 @@ public class CartFragment extends Fragment {
                 cartRecyclerAdapter.setItems(cartItems);
                 if (cartItems.size() > 0){
                     cartEmptyTextView.setVisibility(View.INVISIBLE);
+                    checkoutButton.setVisibility(View.VISIBLE);
                 }else{
                     cartEmptyTextView.setVisibility(View.VISIBLE);
+                    checkoutButton.setVisibility(View.INVISIBLE);
                 }
             }
         });
