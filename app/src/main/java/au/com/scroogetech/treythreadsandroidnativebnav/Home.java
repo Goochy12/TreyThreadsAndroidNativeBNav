@@ -8,6 +8,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
+import au.com.scroogetech.treythreadsandroidnativebnav.fragments.CartFragment;
+import au.com.scroogetech.treythreadsandroidnativebnav.fragments.ContactFragment;
+import au.com.scroogetech.treythreadsandroidnativebnav.fragments.HomeFragment;
+import au.com.scroogetech.treythreadsandroidnativebnav.fragments.StoreFragment;
+
 public class Home extends AppCompatActivity {
 
     private MenuItem homeItem;

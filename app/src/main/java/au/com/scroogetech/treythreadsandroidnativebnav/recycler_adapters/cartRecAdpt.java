@@ -1,6 +1,5 @@
-package au.com.scroogetech.treythreadsandroidnativebnav;
+package au.com.scroogetech.treythreadsandroidnativebnav.recycler_adapters;
 
-import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -10,18 +9,17 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.squareup.picasso.Picasso;
 
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Collections;
 import java.util.List;
 
-import au.com.scroogetech.treythreadsandroidnativebnav.data.CartItem;
+import au.com.scroogetech.treythreadsandroidnativebnav.CartViewModel;
+import au.com.scroogetech.treythreadsandroidnativebnav.R;
+import au.com.scroogetech.treythreadsandroidnativebnav.cart_data.CartItem;
 
 public class cartRecAdpt extends RecyclerView.Adapter<cartRecAdpt.cartViewHolder> {
 

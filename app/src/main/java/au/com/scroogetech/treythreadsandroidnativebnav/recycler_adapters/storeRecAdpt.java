@@ -1,23 +1,27 @@
-package au.com.scroogetech.treythreadsandroidnativebnav;
+package au.com.scroogetech.treythreadsandroidnativebnav.recycler_adapters;
 
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+
+import au.com.scroogetech.treythreadsandroidnativebnav.CartViewModel;
+import au.com.scroogetech.treythreadsandroidnativebnav.R;
+import au.com.scroogetech.treythreadsandroidnativebnav.cart_data.CartItem;
 
 public class storeRecAdpt extends RecyclerView.Adapter<storeRecAdpt.storeViewHolder> {
 
@@ -25,6 +29,8 @@ public class storeRecAdpt extends RecyclerView.Adapter<storeRecAdpt.storeViewHol
     private String[] productList;
     private String[] productImagePath;
     private Context context;
+
+    private CartViewModel cartViewModel;
 
     //constructor
     public storeRecAdpt(int products, String[] productList, String[] productImagePath, Context context){
@@ -47,7 +53,7 @@ public class storeRecAdpt extends RecyclerView.Adapter<storeRecAdpt.storeViewHol
     }
 
     @Override
-    public void onBindViewHolder(@NonNull storeViewHolder holder, int position){
+    public void onBindViewHolder(@NonNull storeViewHolder holder, final int position){
         holder.itemText.setText(productList[position]);
 
 //        new DownloadImageFromInternet((ImageView) findViewById(R.id.image_view))
@@ -65,6 +71,15 @@ public class storeRecAdpt extends RecyclerView.Adapter<storeRecAdpt.storeViewHol
 //            e.printStackTrace();
 //        }
         //holder.itemImage.setImageURI(Uri.parse(productImagePath[position]));
+
+        cartViewModel = ViewModelProviders.of((FragmentActivity) context).get(CartViewModel.class);
+        holder.addToCartButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CartItem cartItem = new CartItem(productList[position],"","NULL");
+                cartViewModel.insert(cartItem);
+            }
+        });
     }
 
     public static Drawable LoadImageFromWeb(String url){
@@ -95,6 +110,7 @@ public class storeRecAdpt extends RecyclerView.Adapter<storeRecAdpt.storeViewHol
         public View itemView;
         public ImageView itemImage;
         public TextView itemText;
+        public Button addToCartButton;
 
 
         public storeViewHolder(View itemView){
@@ -102,6 +118,7 @@ public class storeRecAdpt extends RecyclerView.Adapter<storeRecAdpt.storeViewHol
             this.itemView = itemView;
             itemText = (TextView) itemView.findViewById(R.id.storeCardHeading);
             itemImage = (ImageView) itemView.findViewById(R.id.storeCardImage);
+            addToCartButton = (Button) itemView.findViewById(R.id.addToCartButton);
         }
     }
 

@@ -6,8 +6,8 @@ import android.arch.lifecycle.LiveData;
 
 import java.util.List;
 
-import au.com.scroogetech.treythreadsandroidnativebnav.data.CartItem;
-import au.com.scroogetech.treythreadsandroidnativebnav.data.CartRepository;
+import au.com.scroogetech.treythreadsandroidnativebnav.cart_data.CartItem;
+import au.com.scroogetech.treythreadsandroidnativebnav.cart_data.CartRepository;
 
 public class CartViewModel extends AndroidViewModel {
 

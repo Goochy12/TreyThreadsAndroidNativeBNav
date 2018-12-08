@@ -11,7 +11,7 @@
     <!--android:id="@+id/homeFragmentXML"-->
     <!--android:layout_width="match_parent"-->
     <!--android:layout_height="0dp"-->
-    <!--android:name="au.com.scroogetech.treythreadsandroidnativebnav.HomeFragment"-->
+    <!--android:name="au.com.scroogetech.treythreadsandroidnativebnav.fragments.HomeFragment"-->
     <!--app:layout_constraintBottom_toTopOf="@+id/navigation"-->
     <!--app:layout_constraintTop_toTopOf="parent"-->
     <!--tools:layout="@layout/fragment_home"/>-->

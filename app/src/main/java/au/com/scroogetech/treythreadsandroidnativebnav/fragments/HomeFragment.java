@@ -1,4 +1,4 @@
-package au.com.scroogetech.treythreadsandroidnativebnav;
+package au.com.scroogetech.treythreadsandroidnativebnav.fragments;
 
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -9,6 +9,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import au.com.scroogetech.treythreadsandroidnativebnav.HomeDatabaseHelper;
+import au.com.scroogetech.treythreadsandroidnativebnav.R;
+import au.com.scroogetech.treythreadsandroidnativebnav.recycler_adapters.homeRecAdpt;
 
 
 public class HomeFragment extends Fragment {

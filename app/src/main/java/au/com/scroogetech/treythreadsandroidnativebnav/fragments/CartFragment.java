@@ -1,7 +1,6 @@
-package au.com.scroogetech.treythreadsandroidnativebnav;
+package au.com.scroogetech.treythreadsandroidnativebnav.fragments;
 
 import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,8 +16,11 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import au.com.scroogetech.treythreadsandroidnativebnav.data.CartItem;
-import au.com.scroogetech.treythreadsandroidnativebnav.data.CartItemDatabase;
+import au.com.scroogetech.treythreadsandroidnativebnav.CartViewModel;
+import au.com.scroogetech.treythreadsandroidnativebnav.R;
+import au.com.scroogetech.treythreadsandroidnativebnav.recycler_adapters.cartRecAdpt;
+import au.com.scroogetech.treythreadsandroidnativebnav.cart_data.CartItem;
+import au.com.scroogetech.treythreadsandroidnativebnav.cart_data.CartItemDatabase;
 
 
 public class CartFragment extends Fragment {

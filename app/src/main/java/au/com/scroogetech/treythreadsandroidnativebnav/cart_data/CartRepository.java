@@ -1,4 +1,4 @@
-package au.com.scroogetech.treythreadsandroidnativebnav.data;
+package au.com.scroogetech.treythreadsandroidnativebnav.cart_data;
 
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
