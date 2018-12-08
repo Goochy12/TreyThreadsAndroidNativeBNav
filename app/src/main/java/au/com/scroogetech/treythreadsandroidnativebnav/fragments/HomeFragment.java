@@ -66,9 +66,9 @@ public class HomeFragment extends Fragment {
             Log.i("PRODUCTS", ""+productList[i]);
         }
 
-        //String[] productList = {"1","2","3","4","5","6","7","8","9","10"};
+        String[] productList2 = {"1","2","3","4","5","6","7","8","9","10"};
         //specify adapter
-        homeRecyclerAdapter = new homeRecAdpt(productList);
+        homeRecyclerAdapter = new homeRecAdpt(productList2);
         homeRecycler.setAdapter(homeRecyclerAdapter);
 
 //        if (recLayoutState != null){
