@@ -20,8 +20,10 @@ public class Home extends AppCompatActivity {
     private MenuItem cartItem;
     private MenuItem contactItem;
 
+    private BottomNavigationView navigation;
+
     //fragments
-    private FragmentManager fragMan = getSupportFragmentManager();
+    private FragmentManager fragMan;
     private Fragment homeFrag = new HomeFragment();
     private Fragment storeFrag = new StoreFragment();
     private Fragment cartFrag = new CartFragment();
@@ -123,24 +125,34 @@ public class Home extends AppCompatActivity {
 //        fragmentTransaction.add(R.id.fragmentLayout,homeFragment);
 //        fragmentTransaction.commit();
 
-        //HomeFragment homeFragment = HomeFragment.newInstance("param1","param2");
-        fragMan.beginTransaction().add(R.id.fragmentLayout,homeFrag).commit();
-        active = homeFrag;
-
-        fragMan.beginTransaction().add(R.id.fragmentLayout,storeFrag).hide(storeFrag).commit();
-        fragMan.beginTransaction().add(R.id.fragmentLayout,cartFrag).hide(cartFrag).commit();
-        fragMan.beginTransaction().add(R.id.fragmentLayout,contactFrag).hide(contactFrag).commit();
-
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         //set a null tint on the selected item
         navigation.setItemIconTintList(null);
+
         //get the items
         homeItem = navigation.getMenu().getItem(0);
         storeItem = navigation.getMenu().getItem(1);
         cartItem = navigation.getMenu().getItem(2);
         contactItem = navigation.getMenu().getItem(3);
+
+        //HomeFragment homeFragment = HomeFragment.newInstance("param1","param2");
+
+//        if (savedInstanceState == null) {
+            fragMan = getSupportFragmentManager();
+            fragMan.beginTransaction().add(R.id.fragmentLayout, homeFrag).commit();
+            active = homeFrag;
+
+            fragMan.beginTransaction().add(R.id.fragmentLayout, storeFrag).hide(storeFrag).commit();
+            fragMan.beginTransaction().add(R.id.fragmentLayout, cartFrag).hide(cartFrag).commit();
+            fragMan.beginTransaction().add(R.id.fragmentLayout, contactFrag).hide(contactFrag).commit();
+
+
+//        }else {
+//
+//        }
+
 
 
     }

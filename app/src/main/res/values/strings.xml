@@ -14,5 +14,10 @@
 
     <string name="cart_empty">Your Cart is Empty!</string>
     <string name="addToCart">Add To Cart!</string>
+    <string name="help_message">Enter your message!</string>
+    <string name="enter_email">Email</string>
+    <string name="enter_name">Name</string>
+    <string name="contact_us">Contact Us</string>
+    <string name="send_button">Send</string>
 
 </resources>
