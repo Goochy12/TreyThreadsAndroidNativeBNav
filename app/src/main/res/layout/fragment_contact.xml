@@ -73,13 +73,13 @@
             app:layout_constraintTop_toTopOf="@+id/upperMiddleGuide" />
 
         <EditText
-            android:id="@+id/helpEmailBox"
+            android:id="@+id/helpSubjectBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:ems="10"
-            android:hint="@string/enter_email"
+            android:hint="@string/subject"
             android:inputType="textEmailAddress"
             app:layout_constraintBottom_toTopOf="@+id/guideline6"
             app:layout_constraintEnd_toEndOf="parent"
