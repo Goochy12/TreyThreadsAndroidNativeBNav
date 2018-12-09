@@ -42,7 +42,7 @@ public class ContactFragment extends Fragment {
             public void onClick(View v) {
                 Intent emailIntent = new Intent(Intent.ACTION_SEND);
                 emailIntent.setType("message/rfc822");
-                emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"treythreads@gmail.com"});
+                emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"treyclothingco@gmail.com"});
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject.getText().toString());
                 emailIntent.putExtra(Intent.EXTRA_TEXT, message.getText().toString());
 

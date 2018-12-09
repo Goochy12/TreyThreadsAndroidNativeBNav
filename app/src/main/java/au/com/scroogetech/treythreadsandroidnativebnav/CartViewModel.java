@@ -28,4 +28,12 @@ public class CartViewModel extends AndroidViewModel {
     public void deleteAll(){cartRepository.deleteAllCartItems();}
 
     public void deleteItem(CartItem cartItem){cartRepository.deleteCartItem(cartItem);}
+
+    public CartItem getSameItem(String name, String size){
+        return cartRepository.getSameItem(name,size);
+    }
+
+    public void updateQuantity(CartItem cartItem, int quantity){
+        cartRepository.updateQuantity(cartItem.getItemID(),quantity);
+    }
 }

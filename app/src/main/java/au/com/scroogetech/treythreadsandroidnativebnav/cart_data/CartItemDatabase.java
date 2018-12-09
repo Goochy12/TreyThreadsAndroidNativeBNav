@@ -17,7 +17,7 @@ public abstract class CartItemDatabase extends RoomDatabase {
                 if (INSTANCE == null){
                     //create db
 
-                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),CartItemDatabase.class,"classdb").build();
+                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),CartItemDatabase.class,"cartdb").build();
                 }
             }
         }

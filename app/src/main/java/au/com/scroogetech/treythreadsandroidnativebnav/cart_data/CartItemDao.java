@@ -23,4 +23,11 @@ public interface CartItemDao {
 
     @Query("DELETE FROM CART_TABLE")
     void deleteAllCartItems();
+
+    //check same item
+    @Query("SELECT * FROM CART_TABLE where itemName = :name and itemSize = :size")
+    CartItem getSameItem(String name, String size);
+
+    @Query("UPDATE Cart_Table SET quantity = :quan WHERE itemID = :id ")
+    void updateQuantity(int id, int quan);
 }

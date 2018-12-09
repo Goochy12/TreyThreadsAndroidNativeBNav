@@ -12,15 +12,18 @@ public class CartItem {
     private int itemID;
 
     private String itemName;
-    //private String[] itemSizeList;
+    private String itemSize;
     private String itemPrice;
-    private String itemColour;
+    private String itemPath;
+    private int quantity;
 
-    public CartItem(String itemName, String itemColour, String itemPrice){
+    public CartItem(String itemName, String itemSize, String itemPrice, String itemPath, int quantity){
         this.itemName = itemName;
-        this.itemColour = itemColour;
+        this.itemSize = itemSize;
         //this.itemSizeList = itemSizeList;
         this.itemPrice = itemPrice;
+        this.itemPath = itemPath;
+        this.quantity = quantity;
     }
 
     public int getItemID() {
@@ -55,11 +58,27 @@ public class CartItem {
         this.itemPrice = itemPrice;
     }
 
-    public String getItemColour() {
-        return itemColour;
+    public String getItemSize() {
+        return itemSize;
     }
 
-    public void setItemColour(String itemColour) {
-        this.itemColour = itemColour;
+    public void setItemSize(String itemSize) {
+        this.itemSize = itemSize;
+    }
+
+    public String getItemPath() {
+        return itemPath;
+    }
+
+    public void setItemPath(String itemPath) {
+        this.itemPath = itemPath;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }

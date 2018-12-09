@@ -76,8 +76,15 @@ public class storeRecAdpt extends RecyclerView.Adapter<storeRecAdpt.storeViewHol
         holder.addToCartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CartItem cartItem = new CartItem(productList[position],"","NULL");
-                cartViewModel.insert(cartItem);
+                CartItem cartItem;
+                //CartItem cartItem = cartViewModel.getSameItem("StockName","M");
+//                if (cartItem != null){
+//                    //cartViewModel
+//                }
+//                else {
+                    cartItem = new CartItem(productList[position],"M","NULL","NULL",1);
+                    cartViewModel.insert(cartItem);
+//                }
             }
         });
     }
