@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 27
@@ -36,7 +37,8 @@ dependencies {
     def room_version = "1.1.1"
 
     implementation "android.arch.persistence.room:runtime:$room_version"
-    annotationProcessor "android.arch.persistence.room:compiler:$room_version" // use kapt for Kotlin
+    annotationProcessor "android.arch.persistence.room:compiler:$room_version"
+    // use kapt for Kotlin
 
     // optional - RxJava support for Room
     implementation "android.arch.persistence.room:rxjava2:$room_version"
@@ -49,4 +51,5 @@ dependencies {
 
     implementation "android.arch.lifecycle:extensions:1.1.0"
     implementation "android.arch.lifecycle:viewmodel:1.1.0"
+    implementation 'com.google.firebase:firebase-database:16.0.1'
 }

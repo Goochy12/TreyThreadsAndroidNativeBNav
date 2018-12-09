@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "907805690862",
+    "firebase_url": "https://treytestwebserviceconnection.firebaseio.com",
+    "project_id": "treytestwebserviceconnection",
+    "storage_bucket": "treytestwebserviceconnection.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:907805690862:android:c6bcec2cd112edae",
+        "android_client_info": {
+          "package_name": "au.com.scroogetech.treythreadsandroidnativebnav"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "907805690862-entjbi75j3u6mfna60m18lie9ujm5ona.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "au.com.scroogetech.treythreadsandroidnativebnav",
+            "certificate_hash": "8113e50f852dc00f3b57e8357d4e11c72f5350e2"
+          }
+        },
+        {
+          "client_id": "907805690862-7ai77629imfkdsdrf814rmonnjfongsq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBz1eCaIAgHxhoGd7grx8sa2FSORlheG6Y"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "907805690862-7ai77629imfkdsdrf814rmonnjfongsq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
