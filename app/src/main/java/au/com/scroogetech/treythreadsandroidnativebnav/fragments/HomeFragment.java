@@ -2,6 +2,8 @@ package au.com.scroogetech.treythreadsandroidnativebnav.fragments;
 
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +11,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 
 import au.com.scroogetech.treythreadsandroidnativebnav.HomeDatabaseHelper;
 import au.com.scroogetech.treythreadsandroidnativebnav.R;
@@ -25,6 +38,8 @@ public class HomeFragment extends Fragment {
     private Bundle recBundle;
     private static String LIST_STATE = "LIST_STATE";
     private static String TAG = "LIST_STATE";
+
+    private ArrayList<String> names = new ArrayList<>();
 
     public HomeFragment(){
 
@@ -66,10 +81,46 @@ public class HomeFragment extends Fragment {
             Log.i("PRODUCTS", ""+productList[i]);
         }
 
-        String[] productList2 = {"1","2","3","4","5","6","7","8","9","10"};
-        //specify adapter
-        homeRecyclerAdapter = new homeRecAdpt(productList2);
+        //String[] productList2 = {"1","2","3","4","5","6","7","8","9","10"};
+//specify adapter
+        homeRecyclerAdapter = new homeRecAdpt(names);
         homeRecycler.setAdapter(homeRecyclerAdapter);
+
+
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("home");
+        //
+        myRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                String value = dataSnapshot.getValue(String.class);
+                names.add(value);
+                homeRecyclerAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                String value = dataSnapshot.getValue(String.class);
+                names.remove(value);
+                homeRecyclerAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
 //        if (recLayoutState != null){
 //            Log.i(TAG, "onViewCreated: ");
@@ -84,5 +135,48 @@ public class HomeFragment extends Fragment {
 //
 //
 //        return databaseAccess.getItemName();
+    }
+
+    public void talkToDB(){
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference().child("home");
+
+        //List<String> sA = new ArrayList<>();
+        myRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+//                for (DataSnapshot ds : dataSnapshot.getChildren()){
+//                    sA.add(ds.getValue().toString());
+//                }
+
+                Log.i("ONCLOCK", "onChildAdded: ");
+                String value = dataSnapshot.getValue(String.class);
+                names.add(value);
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        // create child in home object
+        // assign values to child
+
     }
 }

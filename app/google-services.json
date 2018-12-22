@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "907805690862-u7502dtgdak64qolfpvg4dkuf4a5lssr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "au.com.scroogetech.treythreadsandroidnativebnav",
+            "certificate_hash": "5a61ae0f6c87b68bffb91e91606dae0f5226a62f"
+          }
+        },
+        {
           "client_id": "907805690862-7ai77629imfkdsdrf814rmonnjfongsq.apps.googleusercontent.com",
           "client_type": 3
         }

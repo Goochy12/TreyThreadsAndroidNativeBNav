@@ -1,12 +1,26 @@
 package au.com.scroogetech.treythreadsandroidnativebnav.fragments;
 
 import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 import au.com.scroogetech.treythreadsandroidnativebnav.R;
 import au.com.scroogetech.treythreadsandroidnativebnav.StoreDatabaseHelper;
@@ -18,6 +32,8 @@ public class StoreFragment extends Fragment {
     private RecyclerView storeRecycler;
     private RecyclerView.Adapter storeRecyclerAdapter;
     private RecyclerView.LayoutManager storeRecyclerLayoutManager;
+
+    private ArrayList<ArrayList<String>> stockList = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -38,56 +54,58 @@ public class StoreFragment extends Fragment {
         storeRecyclerLayoutManager = new LinearLayoutManager(getActivity());
         storeRecycler.setLayoutManager(storeRecyclerLayoutManager);
 
-        //String[] productList = loadData();
-        //String[] productList = {"New Stock", "Selling Fast", "Social Media"};
-        String[] productList = {"1","2","3","4","5","6","7","8","9","10"};
-
-
-        StoreDatabaseHelper dbHelper = new StoreDatabaseHelper(getActivity());
-//        dbHelper.openDatabase();
-//        dbHelper.getReadableDatabase();
-        int products = dbHelper.getProductCount();
-        productList = dbHelper.getProducts();
-        productList = formatNames(productList);
-
-        String[] productImagePath = dbHelper.getProductImagePath();
-
-
         //specify adapter
-        storeRecyclerAdapter = new storeRecAdpt(products, productList, productImagePath, this.getActivity());
+        storeRecyclerAdapter = new storeRecAdpt(this.getActivity(), stockList);
         storeRecycler.setAdapter(storeRecyclerAdapter);
 
-//        if (recLayoutState != null){
-//            Log.i(TAG, "onViewCreated: ");
-//            storeRecyclerLayoutManager.onRestoreInstanceState(recLayoutState);
-//        }
-    }
-
-    public void getNumberOfItems(){
-
-    }
-
-    public void connectToDataBase(){
-
-    }
-
-    private String[] formatNames(String[] productList){
-        String[] newList = productList; // new String[productList.length];
-        for (int i = 0; i < productList.length;i++){
-            newList[i] = productList[i];
-        }
 
 
-        for (int i = 0; i < newList.length;i++){
-            newList[i] = newList[i].toLowerCase();
-            newList[i] = newList[i].substring(0,1).toUpperCase() + newList[i].substring(1);
-            for (int j = 0; j < newList[i].length();j++){
-                if (newList[i].substring(j,j+1).equals("_")){
-                    newList[i] = newList[i].substring(0,j) + " " + newList[i].substring(j+1,j+2).toUpperCase() + newList[i].substring(j+2);
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final DatabaseReference myRef = database.getReference("stock");
+
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot categorySnapShot : dataSnapshot.getChildren()){
+
+                    for (DataSnapshot itemSnapShot : categorySnapShot.getChildren()){
+                        ArrayList<String> item = new ArrayList<>();
+
+                        String name = itemSnapShot.getKey().toString();
+                        String path = itemSnapShot.child("path").getValue().toString();
+                        String price = itemSnapShot.child("price").getValue().toString();
+                        String size = itemSnapShot.child("size").getValue().toString();
+
+                        item.add(formatName(name));
+                        item.add(path);
+                        item.add(price);
+                        item.add(size);
+
+                        stockList.add(item);
+                    }
                 }
+                storeRecyclerAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private String formatName(String name){
+        String newName = name;
+
+        newName = newName.toLowerCase();
+        newName = newName.substring(0,1).toUpperCase() + newName.substring(1);
+        for (int j = 0; j < newName.length();j++){
+            if (newName.substring(j,j+1).equals("_")){
+                newName = newName.substring(0,j) + " " + newName.substring(j+1,j+2).toUpperCase() + newName.substring(j+2);
             }
         }
-        return newList;
+        return newName;
     }
 
     private String[] formatPath(String[] path){
