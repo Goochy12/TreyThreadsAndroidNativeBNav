@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -38,6 +39,10 @@ public class storeRecAdpt extends RecyclerView.Adapter<storeRecAdpt.storeViewHol
     private Context context;
 
     private ArrayList<ArrayList<String>> stockList = new ArrayList<>();
+    private String name;
+    private String price;
+    private String size;
+    private String path;
 
     private CartViewModel cartViewModel;
 
@@ -64,9 +69,15 @@ public class storeRecAdpt extends RecyclerView.Adapter<storeRecAdpt.storeViewHol
     }
 
     @Override
-    public void onBindViewHolder(@NonNull storeViewHolder holder, final int position){
+    public void onBindViewHolder(@NonNull final storeViewHolder holder, final int position){
+
+        name = stockList.get(position).get(0);
+        path = stockList.get(position).get(1);
+        price = stockList.get(position).get(2);
+        size = stockList.get(position).get(3);
+
         //SET NAME
-        holder.itemText.setText(stockList.get(position).get(0));
+        holder.itemText.setText(name);
 //        holder.itemText.setText(productList[position]);
 
 //        new DownloadImageFromInternet((ImageView) findViewById(R.id.image_view))
@@ -75,16 +86,16 @@ public class storeRecAdpt extends RecyclerView.Adapter<storeRecAdpt.storeViewHol
         //SET IMAGE
         //productImagePath[position] != null && !productImagePath[position].isEmpty()
         if(stockList.get(position).get(1) != null && !stockList.get(position).get(1).isEmpty()){
-            Picasso.get().load(stockList.get(position).get(1)).into(holder.itemImage);
+            Picasso.get().load(path).into(holder.itemImage);
         }
 
         //SET PRICE
-        holder.itemPrice.setText("$"+stockList.get(position).get(2));
+        holder.itemPrice.setText("$"+price);
 
         //SET SIZES
-        ArrayList<String> sizes = formatSizes(stockList.get(position).get(3));
+        ArrayList<String> sizes = formatSizes(size);
 
-        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(context,android.R.layout.simple_spinner_item,sizes);
+        final ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(context,android.R.layout.simple_spinner_item,sizes);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         holder.sizeList.setAdapter(spinnerAdapter);
@@ -110,7 +121,7 @@ public class storeRecAdpt extends RecyclerView.Adapter<storeRecAdpt.storeViewHol
 //                    //cartViewModel
 //                }
 //                else {
-                    cartItem = new CartItem(stockList.get(position).get(0),"M","NULL","NULL",1);
+                    cartItem = new CartItem(name,getSelectedSize(holder),price,path,Integer.parseInt(holder.quantity.getText().toString()));
                     cartViewModel.insert(cartItem);
 //                }
             }
@@ -140,6 +151,7 @@ public class storeRecAdpt extends RecyclerView.Adapter<storeRecAdpt.storeViewHol
         public TextView itemText;
         public TextView itemPrice;
         public Spinner sizeList;
+        public EditText quantity;
         public Button addToCartButton;
 
 
@@ -150,6 +162,7 @@ public class storeRecAdpt extends RecyclerView.Adapter<storeRecAdpt.storeViewHol
             itemImage = (ImageView) itemView.findViewById(R.id.storeCardImage);
             itemPrice = (TextView) itemView.findViewById(R.id.storeCardPrice);
             sizeList = (Spinner) itemView.findViewById(R.id.storeCardSpinner);
+            quantity = (EditText) itemView.findViewById(R.id.store_quantity);
             addToCartButton = (Button) itemView.findViewById(R.id.addToCartButton);
         }
     }
@@ -174,6 +187,10 @@ public class storeRecAdpt extends RecyclerView.Adapter<storeRecAdpt.storeViewHol
         }
 
         return sizeList;
+    }
+
+    public String getSelectedSize(storeViewHolder holder){
+        return holder.sizeList.getSelectedItem().toString();
     }
 
 }
