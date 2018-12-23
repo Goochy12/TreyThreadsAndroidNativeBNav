@@ -17,6 +17,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -25,10 +26,17 @@ import au.com.scroogetech.treythreadsandroidnativebnav.R;
 
 public class homeRecAdpt extends RecyclerView.Adapter<homeRecAdpt.HomeViewHolder> {
 
-    private ArrayList<String> homeData = new ArrayList<>();
+    private ArrayList<ArrayList<String>> homeData = new ArrayList<>();
+
+    private String title;
+    private String message;
+    private String link;
+    private String image;
+    private String internal;
+    private String clickable;
 
     //constructor
-    public homeRecAdpt(ArrayList<String> homeData){
+    public homeRecAdpt(ArrayList<ArrayList<String>> homeData){
         this.homeData = homeData;
     }
 
@@ -46,7 +54,28 @@ public class homeRecAdpt extends RecyclerView.Adapter<homeRecAdpt.HomeViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull HomeViewHolder holder, int position){
-        holder.itemText.setText(homeData.get(position));
+        title = homeData.get(position).get(0);
+        message = homeData.get(position).get(1);
+        link = homeData.get(position).get(2);
+        image = homeData.get(position).get(3);
+        internal = homeData.get(position).get(4);
+        clickable = homeData.get(position).get(5);
+
+
+        holder.itemTitle.setText(title);
+        holder.itemMessage.setText(message);
+
+        //Log.i("ONCLICK", "onBindViewHolder: " + image);
+        if(image != null && !image.isEmpty()){
+            Picasso.get().load(image).into(holder.itemImage);
+        }
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cardClicked();
+            }
+        });
     }
 
     @Override
@@ -62,19 +91,25 @@ public class homeRecAdpt extends RecyclerView.Adapter<homeRecAdpt.HomeViewHolder
     public static class HomeViewHolder extends RecyclerView.ViewHolder{
         public View itemView;
         public ImageView itemImage;
-        public TextView itemText;
+        public TextView itemTitle;
+        public TextView itemMessage;
 
         public HomeViewHolder(View itemView){
             super(itemView);
             this.itemView = itemView;
-            itemText = (TextView) itemView.findViewById(R.id.homeCardHeading);
+            itemTitle = (TextView) itemView.findViewById(R.id.homeCardHeading);
+            itemMessage = (TextView) itemView.findViewById(R.id.homeCardInfo);
             itemImage = (ImageView) itemView.findViewById(R.id.homeCardImage);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+        }
+    }
 
-                }
-            });
+    private void cardClicked(){
+        if (clickable.equals("1")){
+            if (internal.equals("1")){
+
+            }else{
+
+            }
         }
     }
 

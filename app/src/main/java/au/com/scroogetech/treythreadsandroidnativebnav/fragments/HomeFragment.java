@@ -19,11 +19,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
 
-import au.com.scroogetech.treythreadsandroidnativebnav.HomeDatabaseHelper;
 import au.com.scroogetech.treythreadsandroidnativebnav.R;
 import au.com.scroogetech.treythreadsandroidnativebnav.recycler_adapters.homeRecAdpt;
 
@@ -39,7 +36,7 @@ public class HomeFragment extends Fragment {
     private static String LIST_STATE = "LIST_STATE";
     private static String TAG = "LIST_STATE";
 
-    private ArrayList<String> names = new ArrayList<>();
+    private ArrayList<ArrayList<String>> homeItems = new ArrayList<>();
 
     public HomeFragment(){
 
@@ -66,24 +63,8 @@ public class HomeFragment extends Fragment {
         homeRecyclerLayoutManager = new LinearLayoutManager(getActivity());
         homeRecycler.setLayoutManager(homeRecyclerLayoutManager);
 
-        //String[] productList = loadData();
-        String[] productList = {"New Stock", "Selling Fast", "Social Media"};
-
-
-        HomeDatabaseHelper dbHelper = new HomeDatabaseHelper(getActivity());
-//        dbHelper.openDatabase();
-//        dbHelper.getReadableDatabase();
-
-        int products = dbHelper.getItemCount();
-        Log.i("PRODUCTS", "onViewCreated: " + products);
-        productList = dbHelper.getItemList();
-        for (int i = 0; i < productList.length;i++){
-            Log.i("PRODUCTS", ""+productList[i]);
-        }
-
-        //String[] productList2 = {"1","2","3","4","5","6","7","8","9","10"};
 //specify adapter
-        homeRecyclerAdapter = new homeRecAdpt(names);
+        homeRecyclerAdapter = new homeRecAdpt(homeItems);
         homeRecycler.setAdapter(homeRecyclerAdapter);
 
 
@@ -91,29 +72,33 @@ public class HomeFragment extends Fragment {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("home");
         //
-        myRef.addChildEventListener(new ChildEventListener() {
+
+        myRef.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                String value = dataSnapshot.getValue(String.class);
-                names.add(value);
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot categorySnapShot : dataSnapshot.getChildren()){
+
+                    for (DataSnapshot itemSnapShot : categorySnapShot.getChildren()){
+                        ArrayList<String> item = new ArrayList<>();
+
+                        String title = itemSnapShot.child("title").getValue().toString();
+                        String message = itemSnapShot.child("message").getValue().toString();
+                        String link = itemSnapShot.child("link").getValue().toString();
+                        String image = itemSnapShot.child("image").getValue().toString();
+                        String internal = itemSnapShot.child("internal").getValue().toString();
+                        String clickable = itemSnapShot.child("clickable").getValue().toString();
+
+                        item.add(title);
+                        item.add(message);
+                        item.add(link);
+                        item.add(image);
+                        item.add(internal);
+                        item.add(clickable);
+
+                        homeItems.add(item);
+                    }
+                }
                 homeRecyclerAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                String value = dataSnapshot.getValue(String.class);
-                names.remove(value);
-                homeRecyclerAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
             }
 
             @Override
@@ -121,6 +106,7 @@ public class HomeFragment extends Fragment {
 
             }
         });
+
 
 //        if (recLayoutState != null){
 //            Log.i(TAG, "onViewCreated: ");
@@ -137,46 +123,7 @@ public class HomeFragment extends Fragment {
 //        return databaseAccess.getItemName();
     }
 
-    public void talkToDB(){
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference().child("home");
-
-        //List<String> sA = new ArrayList<>();
-        myRef.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-//                for (DataSnapshot ds : dataSnapshot.getChildren()){
-//                    sA.add(ds.getValue().toString());
-//                }
-
-                Log.i("ONCLOCK", "onChildAdded: ");
-                String value = dataSnapshot.getValue(String.class);
-                names.add(value);
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
         // create child in home object
         // assign values to child
 
     }
-}

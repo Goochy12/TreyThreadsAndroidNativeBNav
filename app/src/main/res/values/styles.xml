@@ -6,12 +6,17 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="actionOverflowButtonStyle">@style/DotsWhiteTheme</item>
     </style>
 
     <style name="TreyThreadsTheme" parent="Theme.AppCompat.Light.NoActionBar" />
 
     <style name="TreySplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/treysplashtheme</item>
+    </style>
+
+    <style name="DotsWhiteTheme" parent="@style/Widget.AppCompat.ActionButton.Overflow" >
+        <item name="android:tint">@color/colourWhite</item>
     </style>
 
 </resources>

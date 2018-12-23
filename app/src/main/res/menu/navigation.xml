@@ -17,8 +17,8 @@
         android:title="" />
 
     <item
-        android:id="@+id/navigation_contact"
-        android:icon="@drawable/contactdefault"
+        android:id="@+id/navigation_account"
+        android:icon="@drawable/user_default"
         android:title=""/>
 
 </menu>
