@@ -31,12 +31,6 @@ public class homeRecAdpt extends RecyclerView.Adapter<homeRecAdpt.HomeViewHolder
 
     private ArrayList<ArrayList<String>> homeData = new ArrayList<>();
 
-    private String title;
-    private String message;
-    private String link;
-    private String image;
-    private String internal;
-    private String clickable;
     private Context context;
 
     //constructor
@@ -59,12 +53,12 @@ public class homeRecAdpt extends RecyclerView.Adapter<homeRecAdpt.HomeViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull HomeViewHolder holder, int position){
-        title = homeData.get(position).get(0);
-        message = homeData.get(position).get(1);
-        link = homeData.get(position).get(2);
-        image = homeData.get(position).get(3);
-        internal = homeData.get(position).get(4);
-        clickable = homeData.get(position).get(5);
+        String title = homeData.get(position).get(0);
+        String message = homeData.get(position).get(1);
+        final String link = homeData.get(position).get(2);
+        String image = homeData.get(position).get(3);
+        final String internal = homeData.get(position).get(4);
+        String clickable = homeData.get(position).get(5);
 
 
         holder.itemTitle.setText(title);
@@ -78,7 +72,7 @@ public class homeRecAdpt extends RecyclerView.Adapter<homeRecAdpt.HomeViewHolder
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cardClicked(link);
+                cardClicked(internal, link);
             }
         });
     }
@@ -108,7 +102,7 @@ public class homeRecAdpt extends RecyclerView.Adapter<homeRecAdpt.HomeViewHolder
         }
     }
 
-    private void cardClicked(String link){
+    private void cardClicked(String internal, String link){
             if (internal.equals("1")){
 
             }else{
