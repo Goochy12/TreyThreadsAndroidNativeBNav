@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,7 @@ public class StoreFragment extends Fragment {
     private RecyclerView.LayoutManager storeRecyclerLayoutManager;
 
     private ArrayList<ArrayList<String>> stockList = new ArrayList<>();
+    private ArrayList<ArrayList<String>> stockProperties = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,7 +51,7 @@ public class StoreFragment extends Fragment {
         storeRecycler.setLayoutManager(storeRecyclerLayoutManager);
 
         //specify adapter
-        storeRecyclerAdapter = new storeRecAdpt(this.getActivity(), stockList);
+        storeRecyclerAdapter = new storeRecAdpt(this.getActivity(), stockList, stockProperties);
         storeRecycler.setAdapter(storeRecyclerAdapter);
 
 
@@ -63,20 +65,45 @@ public class StoreFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot categorySnapShot : dataSnapshot.getChildren()){
 
-                    for (DataSnapshot itemSnapShot : categorySnapShot.getChildren()){
-                        ArrayList<String> item = new ArrayList<>();
+                    for (DataSnapshot typeSnapShot : categorySnapShot.getChildren()){
+                        ArrayList<String> type = new ArrayList<>();
 
-                        String name = itemSnapShot.getKey().toString();
-                        String path = itemSnapShot.child("path").getValue().toString();
-                        String price = itemSnapShot.child("price").getValue().toString();
-                        String size = itemSnapShot.child("size").getValue().toString();
+                        String name = typeSnapShot.getKey();
+                        String price = typeSnapShot.child("price").getValue().toString();
+                        String id = typeSnapShot.child("id").getValue().toString();
 
-                        item.add(formatName(name));
-                        item.add(path);
-                        item.add(price);
-                        item.add(size);
+                        type.add(id);
+                        type.add(formatName(name));
+                        type.add(price);
 
-                        stockList.add(item);
+                        stockList.add(type);
+
+                        for (DataSnapshot eachColour : typeSnapShot.getChildren()){
+                            ArrayList<String> specifics = new ArrayList<>();
+                            if (eachColour.child("id").exists()) {
+
+                                String colourID = eachColour.child("id").getValue().toString();
+                                String colour = eachColour.getKey();
+//                                Log.i("OHERE", "Name: " + name + ", Colour: " + colour);
+//                            String back_path = typeSnapShot.child("image_back").getValue().toString();
+                                String S = eachColour.child("S").getValue().toString();
+                                String M = eachColour.child("M").getValue().toString();
+                                String L = eachColour.child("L").getValue().toString();
+                                String XL = eachColour.child("XL").getValue().toString();
+                                String front_path = eachColour.child("image_front").getValue(String.class);
+
+                                specifics.add(colourID);
+                                specifics.add(formatName(colour));
+                                specifics.add(S);
+                                specifics.add(M);
+                                specifics.add(L);
+                                specifics.add(XL);
+                                specifics.add(front_path);
+//                            specifics.add(back_path);
+
+                                stockProperties.add(specifics);
+                            }
+                        }
                     }
                 }
                 storeRecyclerAdapter.notifyDataSetChanged();

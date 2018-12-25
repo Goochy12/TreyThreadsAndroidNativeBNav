@@ -3,17 +3,25 @@ package au.com.scroogetech.treythreadsandroidnativebnav.recycler_adapters;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -48,26 +56,55 @@ public class cartRecAdpt extends RecyclerView.Adapter<cartRecAdpt.cartViewHolder
     }
 
     @Override
-    public void onBindViewHolder(@NonNull cartViewHolder holder, int position){
-        //holder.itemText.setText(productList[position]);
-
-//        new DownloadImageFromInternet((ImageView) findViewById(R.id.image_view))
-//                .execute("https://pbs.twimg.com/profile_images/630285593268752384/iD1MkFQ0.png");
-//        if(productImagePath[position] != null && !productImagePath[position].isEmpty()){
-//            Picasso.get().load("http://goochystesting.tk/" + productImagePath[position]).into(holder.itemImage);
-//        }
-        //holder.itemImage.setImageDrawable(LoadImageFromWeb("http://goochystesting.tk/" + productImagePath[position]));
-
-//        Bitmap bitmap = null;
-//        try {
-//            bitmap = BitmapFactory.decodeStream((InputStream)new URL(productImagePath[position]).getContent());
-//            holder.itemImage.setImageBitmap(bitmap);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-        //holder.itemImage.setImageURI(Uri.parse(productImagePath[position]));
+    public void onBindViewHolder(@NonNull final cartViewHolder holder, final int position){
 
         holder.itemText.setText(cartItems.get(position).getItemName());
+        holder.itemPrice.setText("$" + cartItems.get(position).getItemPrice().toString());
+        holder.itemSize.setText(cartItems.get(position).getItemSize());
+        holder.itemColour.setText(cartItems.get(position).getColour());
+
+        //quantity spinner
+        ArrayList<String> quantity = new ArrayList<>();
+
+        //add max quantity
+        int i = 0;
+        while (i < 5 && i < cartItems.get(position).getMaxQuantity()){
+            quantity.add(Integer.toString(i+1));
+            i++;
+        }
+
+
+        final ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(context,android.R.layout.simple_spinner_item,quantity);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        holder.itemQuantity.setAdapter(spinnerAdapter);
+        //set selected quantity
+        holder.itemQuantity.setSelection(cartItems.get(position).getQuantity() - 1);
+
+        holder.itemQuantity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                //cartViewModel.updateQuantity(cartItems.get(position), holder.itemQuantity.getSelectedItemPosition() + 1);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        //image
+        if(cartItems.get(position).getItemPath() != null && !cartItems.get(position).getItemPath().isEmpty()){
+            Picasso.get().load(cartItems.get(position).getItemPath()).into(holder.itemImage);
+        }
+
+        holder.removeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cartViewModel.deleteItem(cartItems.get(position));
+                notifyDataSetChanged();
+            }
+        });
     }
 
     public static Drawable LoadImageFromWeb(String url){
@@ -101,13 +138,23 @@ public class cartRecAdpt extends RecyclerView.Adapter<cartRecAdpt.cartViewHolder
         public View itemView;
         public ImageView itemImage;
         public TextView itemText;
+        public TextView itemPrice;
+        public TextView itemSize;
+        public TextView itemColour;
+        public ImageView removeButton;
+        public Spinner itemQuantity;
 
 
         public cartViewHolder(View itemView){
             super(itemView);
             this.itemView = itemView;
             itemText = (TextView) itemView.findViewById(R.id.cartCardHeading);
+            itemPrice = (TextView) itemView.findViewById(R.id.cartCardPrice);
+            itemSize = (TextView) itemView.findViewById(R.id.cartCardSize);
+            itemColour = (TextView) itemView.findViewById(R.id.cartColour);
             itemImage = (ImageView) itemView.findViewById(R.id.cartCardImage);
+            itemQuantity = (Spinner) itemView.findViewById(R.id.cartCardSpinner);
+            removeButton = (ImageView) itemView.findViewById(R.id.removeFromCartButton);
         }
     }
 

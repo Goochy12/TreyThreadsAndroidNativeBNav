@@ -64,7 +64,7 @@ public class HomeFragment extends Fragment {
         homeRecycler.setLayoutManager(homeRecyclerLayoutManager);
 
 //specify adapter
-        homeRecyclerAdapter = new homeRecAdpt(homeItems);
+        homeRecyclerAdapter = new homeRecAdpt(homeItems, getActivity());
         homeRecycler.setAdapter(homeRecyclerAdapter);
 
 

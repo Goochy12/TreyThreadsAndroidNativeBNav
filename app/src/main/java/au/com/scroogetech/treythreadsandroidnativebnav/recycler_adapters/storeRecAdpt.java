@@ -1,9 +1,7 @@
 package au.com.scroogetech.treythreadsandroidnativebnav.recycler_adapters;
 
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
-import android.database.DataSetObserver;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
@@ -12,13 +10,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -33,27 +29,22 @@ import au.com.scroogetech.treythreadsandroidnativebnav.cart_data.CartItem;
 
 public class storeRecAdpt extends RecyclerView.Adapter<storeRecAdpt.storeViewHolder> {
 
-    private int products;
-    private String[] productList;
-    private String[] productImagePath;
     private Context context;
 
     private ArrayList<ArrayList<String>> stockList = new ArrayList<>();
-    private String name;
-    private String price;
-    private String size;
-    private String path;
+    private ArrayList<ArrayList<String>> stockProperties = new ArrayList<>();
+    private int colourSpinnerPos;
+
 
     private CartViewModel cartViewModel;
 
     //constructor
-    public storeRecAdpt(Context context, ArrayList<ArrayList<String>> stockList){
-        this.products = products;
-        this.productList = productList;
-        this.productImagePath = productImagePath;
+    public storeRecAdpt(Context context, ArrayList<ArrayList<String>> stockList, ArrayList<ArrayList<String>> stockProperties){
+
         this.context = context;
 
         this.stockList = stockList;
+        this.stockProperties = stockProperties;
     }
 
     //create views
@@ -71,46 +62,107 @@ public class storeRecAdpt extends RecyclerView.Adapter<storeRecAdpt.storeViewHol
     @Override
     public void onBindViewHolder(@NonNull final storeViewHolder holder, final int position){
 
-        name = stockList.get(position).get(0);
-        path = stockList.get(position).get(1);
+        String name;
+        String price;
+        String id;
+
+        final ArrayList<String> path = new ArrayList<>();
+
+        id = stockList.get(position).get(0);
+        name = stockList.get(position).get(1);
         price = stockList.get(position).get(2);
-        size = stockList.get(position).get(3);
+
+
+
+        ArrayList<String> colourList = new ArrayList<>();
+
+        final ArrayList<ArrayList<Integer>> quantityList = new ArrayList<>();
+
+        //get colours
+        for(int i = 0; i < stockProperties.size(); i++){
+            if (stockProperties.get(i).get(0).equals(id)){
+                colourList.add(stockProperties.get(i).get(1));
+//        Log.i("OHERE", "onBindViewHolder: " + name + ", " + stockProperties.get(i).get(1) + ", " + stockProperties.get(i).get(3));
+
+                //get quantities of sizes
+                ArrayList<Integer> tempSizes = new ArrayList<>();
+                tempSizes.add(Integer.parseInt(stockProperties.get(i).get(2)));
+                tempSizes.add(Integer.parseInt(stockProperties.get(i).get(3)));
+                tempSizes.add(Integer.parseInt(stockProperties.get(i).get(4)));
+                tempSizes.add(Integer.parseInt(stockProperties.get(i).get(5)));
+
+                path.add(stockProperties.get(i).get(6));
+
+                quantityList.add(tempSizes);
+            }
+        }
+
+        //GET SIZES AVAILABLE
+        ArrayList<String> sizeList = getSizeList(quantityList.get(0));
+        if (sizeList.size() == 0){
+            holder.addToCartButton.setEnabled(false);
+            holder.sizeList.setEnabled(false);
+        }
+
+
+//        path = stockList.get(position).get(1);
 
         //SET NAME
         holder.itemText.setText(name);
-//        holder.itemText.setText(productList[position]);
 
-//        new DownloadImageFromInternet((ImageView) findViewById(R.id.image_view))
-//                .execute("https://pbs.twimg.com/profile_images/630285593268752384/iD1MkFQ0.png");
-
-        //SET IMAGE
-        //productImagePath[position] != null && !productImagePath[position].isEmpty()
-        if(stockList.get(position).get(1) != null && !stockList.get(position).get(1).isEmpty()){
-            Picasso.get().load(path).into(holder.itemImage);
-        }
 
         //SET PRICE
         holder.itemPrice.setText("$"+price);
 
         //SET SIZES
-        ArrayList<String> sizes = formatSizes(size);
 
-        final ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(context,android.R.layout.simple_spinner_item,sizes);
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        final ArrayAdapter<String> sizeSpinnerAdapter = new ArrayAdapter<>(context,android.R.layout.simple_spinner_item,sizeList);
+        sizeSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        holder.sizeList.setAdapter(spinnerAdapter);
+        holder.sizeList.setAdapter(sizeSpinnerAdapter);
 
-        //holder.itemImage.setImageDrawable(LoadImageFromWeb("http://goochystesting.tk/" + productImagePath[position]));
 
-//        Bitmap bitmap = null;
-//        try {
-//            bitmap = BitmapFactory.decodeStream((InputStream)new URL(productImagePath[position]).getContent());
-//            holder.itemImage.setImageBitmap(bitmap);
-//        } catch (IOException e) {
-//            e.printStackTrace();
+        //SET COLOURS
+        final ArrayAdapter<String> colourSpinnerAdapter = new ArrayAdapter<>(context,android.R.layout.simple_spinner_item,colourList);
+        colourSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        holder.colourList.setAdapter(colourSpinnerAdapter);
+        //colour listener
+        holder.colourList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int spinnerPosition, long id) {
+                colourSpinnerPos = spinnerPosition;
+
+                //set image
+                setImage(path.get(spinnerPosition),holder);
+
+                //updates sizes
+                ArrayList<String> updatedSizeList = getSizeList(quantityList.get(spinnerPosition));
+                if (updatedSizeList.size() == 0){
+                    holder.addToCartButton.setEnabled(false);
+                    holder.sizeList.setEnabled(false);
+                }else{
+                    holder.addToCartButton.setEnabled(true);
+                    holder.sizeList.setEnabled(true);
+                }
+
+                setSpinnerAdapter(holder,updatedSizeList);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        //SET IMAGE
+        //productImagePath[position] != null && !productImagePath[position].isEmpty()
+//        if(stockProperties.get(position).get(6) != null && !stockProperties.get(position).get(6).isEmpty()){
+//            Picasso.get().load(path.get()).into(holder.itemImage);
 //        }
-        //holder.itemImage.setImageURI(Uri.parse(productImagePath[position]));
 
+
+        //Add to cart button
         cartViewModel = ViewModelProviders.of((FragmentActivity) context).get(CartViewModel.class);
         holder.addToCartButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,7 +173,18 @@ public class storeRecAdpt extends RecyclerView.Adapter<storeRecAdpt.storeViewHol
 //                    //cartViewModel
 //                }
 //                else {
-                    cartItem = new CartItem(name,getSelectedSize(holder),price,path,Integer.parseInt(holder.quantity.getText().toString()));
+                String name;
+                String price;
+                String pa;
+                String colour;
+                int maxQuantity = quantityList.get(colourSpinnerPos).get(holder.sizeList.getSelectedItemPosition());
+
+                name = stockList.get(position).get(1);
+                pa = path.get(colourSpinnerPos);
+                price = stockList.get(position).get(2);
+                colour = getSelectedColour(holder);
+
+                    cartItem = new CartItem(name,getSelectedSize(holder),price,pa,1,maxQuantity, colour);
                     cartViewModel.insert(cartItem);
 //                }
             }
@@ -151,7 +214,7 @@ public class storeRecAdpt extends RecyclerView.Adapter<storeRecAdpt.storeViewHol
         public TextView itemText;
         public TextView itemPrice;
         public Spinner sizeList;
-        public EditText quantity;
+        public Spinner colourList;
         public Button addToCartButton;
 
 
@@ -161,36 +224,51 @@ public class storeRecAdpt extends RecyclerView.Adapter<storeRecAdpt.storeViewHol
             itemText = (TextView) itemView.findViewById(R.id.storeCardHeading);
             itemImage = (ImageView) itemView.findViewById(R.id.storeCardImage);
             itemPrice = (TextView) itemView.findViewById(R.id.storeCardPrice);
-            sizeList = (Spinner) itemView.findViewById(R.id.storeCardSpinner);
-            quantity = (EditText) itemView.findViewById(R.id.store_quantity);
+            sizeList = (Spinner) itemView.findViewById(R.id.storeSizeSpinner);
+            colourList = (Spinner) itemView.findViewById(R.id.storeColourSpinner);
             addToCartButton = (Button) itemView.findViewById(R.id.addToCartButton);
         }
     }
 
+    public String getSelectedSize(storeViewHolder holder){
+        return holder.sizeList.getSelectedItem().toString();
+    }
 
-    public ArrayList<String> formatSizes(String sizes){
+    public String getSelectedColour(storeViewHolder holder){
+        return holder.colourList.getSelectedItem().toString();
+//        return (int) holder.colourList.getSelectedItem();
+    }
+
+    public void setImage(String path, storeViewHolder holder){
+        if(path != null && !path.isEmpty()){
+            Picasso.get().load(path).into(holder.itemImage);
+        }
+    }
+
+    public ArrayList<String> getSizeList(ArrayList<Integer> quantitiesList){
         ArrayList<String> sizeList = new ArrayList<>();
 
-        for (int i = 0; i < sizes.length(); i++){
-            if (sizes.substring(i,i+1).equals("S")){
-                sizeList.add("S");
-            }
-            if (sizes.substring(i,i+1).equals("M")){
-                sizeList.add("M");
-            }
-            if (i+2 <= sizes.length() && sizes.substring(i,i+2).equals("L,")){
-                sizeList.add("L");
-            }
-            if (i+2 <= sizes.length() && sizes.substring(i,i+2).equals("XL")){
-                sizeList.add("XL");
-            }
+        if (quantitiesList.get(0) > 0){
+            sizeList.add("S");
+        }
+        if (quantitiesList.get(1) > 0){
+            sizeList.add("M");
+        }
+        if (quantitiesList.get(2) > 0){
+            sizeList.add("L");
+        }
+        if (quantitiesList.get(3) > 0){
+            sizeList.add("XL");
         }
 
         return sizeList;
     }
 
-    public String getSelectedSize(storeViewHolder holder){
-        return holder.sizeList.getSelectedItem().toString();
+    public void setSpinnerAdapter(storeViewHolder holder, ArrayList<String> sizeList){
+        final ArrayAdapter<String> sizeSpinnerAdapter = new ArrayAdapter<>(context,android.R.layout.simple_spinner_item,sizeList);
+        sizeSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        holder.sizeList.setAdapter(sizeSpinnerAdapter);
     }
 
 }

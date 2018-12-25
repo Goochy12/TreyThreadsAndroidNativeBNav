@@ -3,6 +3,7 @@ package au.com.scroogetech.treythreadsandroidnativebnav.cart_data;
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.util.List;
 
@@ -22,14 +23,15 @@ public class CartRepository {
 //    public void insertCartItem(CartItem cartItem){mCartItemDao.insertCartItem(cartItem);}
     public void insertCartItem(CartItem cartItem){new insertAsyncTask(mCartItemDao).execute(cartItem);}
     public void deleteAllCartItems(){new deleteAllAsyncTask(mCartItemDao).execute();}
-    public void deleteCartItem(CartItem cartItem){new deleteItemAsyncTask(mCartItemDao).execute();}
+    public void deleteCartItem(CartItem cartItem){new deleteItemAsyncTask(mCartItemDao).execute(cartItem);}
 
     public CartItem getSameItem(String name, String size){
         return mCartItemDao.getSameItem(name,size);
     }
 
-    public void updateQuantity(int id, int quan){
-        new updateQuantityAsyncTask(mCartItemDao).execute();
+    public void updateQuantity(CartItem cartItem, int quan){
+        new updateQuantityAsyncTask(mCartItemDao, quan).execute(cartItem);
+//        mCartItemDao.updateQuantity(cartItem.getItemID(),quan);
     }
 
     private static class insertAsyncTask extends AsyncTask<CartItem, Void, Void>{
@@ -39,7 +41,8 @@ public class CartRepository {
 
         @Override
         protected Void doInBackground(final CartItem... params){
-            CartItem newCartItem = new CartItem(params[0].getItemName(),params[0].getItemSize(),params[0].getItemPrice(),params[0].getItemPath(),params[0].getQuantity());
+            CartItem newCartItem = new CartItem(params[0].getItemName(),params[0].getItemSize(),params[0].getItemPrice(),params[0].getItemPath(),
+                    params[0].getQuantity(), params[0].getMaxQuantity(), params[0].getColour());
             mAsyncCartDao.insertCartItem(newCartItem);
 
             return null;
@@ -74,12 +77,16 @@ public class CartRepository {
 
     private static class updateQuantityAsyncTask extends AsyncTask<CartItem, Void, Void>{
         private CartItemDao mAsyncCartDao;
+        private int quan;
 
-        updateQuantityAsyncTask(CartItemDao cartItemDao){mAsyncCartDao = cartItemDao;}
+        updateQuantityAsyncTask(CartItemDao cartItemDao, int quan){
+            mAsyncCartDao = cartItemDao;
+            this.quan = quan;
+        }
 
         @Override
         protected Void doInBackground(final CartItem... params){
-            mAsyncCartDao.updateQuantity(params[0].getItemID(),params[0].getQuantity());
+            mAsyncCartDao.updateQuantity(params[0].getItemID(),quan);
 
             return null;
         }

@@ -65,6 +65,7 @@ public class CartFragment extends Fragment {
 
         cartEmptyTextView = (TextView) view.findViewById(R.id.cartEmptyMessage);
         checkoutButton = (Button) view.findViewById(R.id.checkoutButton);
+        checkoutButton.setBackgroundColor(getResources().getColor(android.R.color.black));
 
         cartViewModel = ViewModelProviders.of((FragmentActivity) this.getContext()).get(CartViewModel.class);
         cartViewModel.getAllItems().observe(this, new Observer<List<CartItem>>() {

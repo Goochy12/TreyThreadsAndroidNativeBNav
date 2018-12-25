@@ -1,5 +1,8 @@
 package au.com.scroogetech.treythreadsandroidnativebnav.recycler_adapters;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -34,10 +37,12 @@ public class homeRecAdpt extends RecyclerView.Adapter<homeRecAdpt.HomeViewHolder
     private String image;
     private String internal;
     private String clickable;
+    private Context context;
 
     //constructor
-    public homeRecAdpt(ArrayList<ArrayList<String>> homeData){
+    public homeRecAdpt(ArrayList<ArrayList<String>> homeData, Context context){
         this.homeData = homeData;
+        this.context = context;
     }
 
     //create views
@@ -73,7 +78,7 @@ public class homeRecAdpt extends RecyclerView.Adapter<homeRecAdpt.HomeViewHolder
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cardClicked();
+                cardClicked(link);
             }
         });
     }
@@ -103,14 +108,13 @@ public class homeRecAdpt extends RecyclerView.Adapter<homeRecAdpt.HomeViewHolder
         }
     }
 
-    private void cardClicked(){
-        if (clickable.equals("1")){
+    private void cardClicked(String link){
             if (internal.equals("1")){
 
             }else{
-
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
+                context.startActivity(browserIntent);
             }
         }
     }
 
-}

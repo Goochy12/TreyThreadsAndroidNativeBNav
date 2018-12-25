@@ -18,7 +18,6 @@
             android:id="@+id/storeCardImage"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:src="@drawable/treysplash"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -55,45 +54,38 @@
             style="@style/Widget.AppCompat.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:text="@string/addToCart"
             android:textSize="10sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/guideline10"
+            app:layout_constraintStart_toStartOf="@+id/guideline14"
             app:layout_constraintTop_toTopOf="@+id/guideline3" />
 
         <Spinner
-        android:id="@+id/storeCardSpinner"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline3"
-        app:layout_constraintEnd_toStartOf="@+id/guideline11"
-        app:layout_constraintStart_toStartOf="@+id/guideline10"
-        app:layout_constraintTop_toBottomOf="@id/guideline4" />
-
-        <EditText
-            android:id="@+id/store_quantity"
+            android:id="@+id/storeSizeSpinner"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:inputType="number"
-            android:selectAllOnFocus="true"
-            android:singleLine="true"
-            android:text="1"
-            android:textAlignment="textEnd"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guideline14"
+            app:layout_constraintStart_toStartOf="@+id/guideline10"
+            app:layout_constraintTop_toTopOf="@+id/guideline3" />
+
+        <Spinner
+            android:id="@+id/storeColourSpinner"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
             app:layout_constraintBottom_toTopOf="@+id/guideline3"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/guideline11"
-            app:layout_constraintTop_toTopOf="@+id/guideline4"
-            android:imeOptions="actionDone"/>
+            app:layout_constraintStart_toStartOf="@+id/guideline10"
+            app:layout_constraintTop_toTopOf="@+id/guideline4" />
 
         <android.support.constraint.Guideline
             android:id="@+id/guideline4"
@@ -121,7 +113,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent=".45" />
+            app:layout_constraintGuide_percent=".4" />
 
         <android.support.constraint.Guideline
             android:id="@+id/guideline3"
@@ -131,11 +123,11 @@
             app:layout_constraintGuide_percent=".7" />
 
         <android.support.constraint.Guideline
-            android:id="@+id/guideline11"
+            android:id="@+id/guideline14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent=".8" />
+            app:layout_constraintGuide_percent=".75" />
 
 
     </android.support.constraint.ConstraintLayout>
