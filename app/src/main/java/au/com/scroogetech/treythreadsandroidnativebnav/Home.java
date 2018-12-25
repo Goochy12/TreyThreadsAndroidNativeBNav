@@ -60,7 +60,7 @@ public class Home extends AppCompatActivity {
                     storeItem.setIcon(R.drawable.storedefault);
                     cartItem.setIcon(R.drawable.cartdefault);
                     accountItem.setIcon(R.drawable.user_default);
-                    contactItem.setIcon(R.drawable.contactdefault);
+                    contactItem.setIcon(R.drawable.contact_clicked);
 
                     //load home fragment
                     fragMan.beginTransaction().hide(active).show(homeFrag).commit();
@@ -77,7 +77,7 @@ public class Home extends AppCompatActivity {
                     homeItem.setIcon(R.drawable.homedefault);
                     cartItem.setIcon(R.drawable.cartdefault);
                     accountItem.setIcon(R.drawable.user_default);
-                    contactItem.setIcon(R.drawable.contactdefault);
+                    contactItem.setIcon(R.drawable.contact_clicked);
 
                     //load store fragment
                     fragMan.beginTransaction().hide(active).show(storeFrag).commit();
@@ -94,7 +94,7 @@ public class Home extends AppCompatActivity {
                     homeItem.setIcon(R.drawable.homedefault);
                     storeItem.setIcon(R.drawable.storedefault);
                     accountItem.setIcon(R.drawable.user_default);
-                    contactItem.setIcon(R.drawable.contactdefault);
+                    contactItem.setIcon(R.drawable.contact_clicked);
 
                     //load cart fragment
                     fragMan.beginTransaction().hide(active).show(cartFrag).commit();
@@ -111,7 +111,7 @@ public class Home extends AppCompatActivity {
                     homeItem.setIcon(R.drawable.homedefault);
                     storeItem.setIcon(R.drawable.storedefault);
                     cartItem.setIcon(R.drawable.cartdefault);
-                    contactItem.setIcon(R.drawable.contactdefault);
+                    contactItem.setIcon(R.drawable.contact_clicked);
 
                     //load contact fragment
                     fragMan.beginTransaction().hide(active).show(accountFrag).commit();
@@ -195,7 +195,7 @@ public class Home extends AppCompatActivity {
             case R.id.navigation_contact:
 
                 //set icon to clicked
-                contactItem.setIcon(R.drawable.contact_clicked);
+                contactItem.setIcon(R.drawable.contactdefault);
 
                 //set other icons to not clicked
                 accountItem.setIcon(R.drawable.user_default);

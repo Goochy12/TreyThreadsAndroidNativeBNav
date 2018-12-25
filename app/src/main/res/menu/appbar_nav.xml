@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/navigation_contact"
-        android:icon="@drawable/contactdefault"
+        android:icon="@drawable/contact_clicked"
         android:title=""
         app:showAsAction="always"/>
     <item
