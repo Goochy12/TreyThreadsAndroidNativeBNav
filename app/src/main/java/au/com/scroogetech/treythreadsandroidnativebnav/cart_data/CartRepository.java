@@ -30,6 +30,7 @@ public class CartRepository {
     }
 
     public void updateQuantity(CartItem cartItem, int quan){
+        Log.i("OHERE", "hellothere ");
         new updateQuantityAsyncTask(mCartItemDao, quan).execute(cartItem);
 //        mCartItemDao.updateQuantity(cartItem.getItemID(),quan);
     }
@@ -86,6 +87,7 @@ public class CartRepository {
 
         @Override
         protected Void doInBackground(final CartItem... params){
+            Log.i("OHERE", "doInBackground: ");
             mAsyncCartDao.updateQuantity(params[0].getItemID(),quan);
 
             return null;

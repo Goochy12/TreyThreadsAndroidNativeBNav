@@ -36,6 +36,8 @@ public class CartViewModel extends AndroidViewModel {
     }
 
     public void updateQuantity(CartItem cartItem, int quantity){
+        Log.i("OHERE", "updateQuantity: ");
         cartRepository.updateQuantity(cartItem,quantity);
+        Log.i("OHERE", "updateQuantity:2 ");
     }
 }

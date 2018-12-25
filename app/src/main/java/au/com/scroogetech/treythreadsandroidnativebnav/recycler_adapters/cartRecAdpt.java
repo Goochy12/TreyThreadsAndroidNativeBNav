@@ -36,6 +36,7 @@ public class cartRecAdpt extends RecyclerView.Adapter<cartRecAdpt.cartViewHolder
     private List<CartItem> cartItems = Collections.emptyList();
     private CartViewModel cartViewModel;
     private Context context;
+    private Boolean first = true;
 
     //constructor
     public cartRecAdpt(Context context){
@@ -68,7 +69,7 @@ public class cartRecAdpt extends RecyclerView.Adapter<cartRecAdpt.cartViewHolder
 
         //add max quantity
         int i = 0;
-        Log.i("OHERE", "onBindViewHolder: " + cartItems.get(position).getMaxQuantity());
+//        Log.i("OHERE", "onBindViewHolder: " + cartItems.get(position).getMaxQuantity());
         while (i < 5 && i < cartItems.get(position).getMaxQuantity()){
             quantity.add(Integer.toString(i+1));
             i++;
@@ -82,17 +83,19 @@ public class cartRecAdpt extends RecyclerView.Adapter<cartRecAdpt.cartViewHolder
         //set selected quantity
         holder.itemQuantity.setSelection(cartItems.get(position).getQuantity() - 1);
 
-//        holder.itemQuantity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                //cartViewModel.updateQuantity(cartItems.get(position), holder.itemQuantity.getSelectedItemPosition() + 1);
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//
-//            }
-//        });
+        holder.itemQuantity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int spinnerPosition, long id) {
+//                cartViewModel.updateQuantity(cartItems.get(position), holder.itemQuantity.getSelectedItemPosition() + 1);
+                //updateQuan(position, holder.itemQuantity.getSelectedItemPosition() + 1);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
 
         //image
         if(cartItems.get(position).getItemPath() != null && !cartItems.get(position).getItemPath().isEmpty()){
@@ -157,6 +160,10 @@ public class cartRecAdpt extends RecyclerView.Adapter<cartRecAdpt.cartViewHolder
             itemQuantity = (Spinner) itemView.findViewById(R.id.cartCardSpinner);
             removeButton = (ImageView) itemView.findViewById(R.id.removeFromCartButton);
         }
+    }
+
+    public void updateQuan(int position, int quantity){
+        cartViewModel.updateQuantity(cartItems.get(position), quantity);
     }
 
 }

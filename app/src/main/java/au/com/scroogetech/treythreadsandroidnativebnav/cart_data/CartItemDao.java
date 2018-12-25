@@ -28,6 +28,6 @@ public interface CartItemDao {
     @Query("SELECT * FROM CART_TABLE where itemName = :name and itemSize = :size")
     CartItem getSameItem(String name, String size);
 
-    @Query("UPDATE Cart_Table SET quantity = :quan WHERE itemID = :id ")
+    @Query("UPDATE CART_TABLE SET quantity = :quan WHERE itemID = :id ")
     void updateQuantity(int id, int quan);
 }
