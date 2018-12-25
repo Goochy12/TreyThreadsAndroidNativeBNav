@@ -68,6 +68,7 @@ public class cartRecAdpt extends RecyclerView.Adapter<cartRecAdpt.cartViewHolder
 
         //add max quantity
         int i = 0;
+        Log.i("OHERE", "onBindViewHolder: " + cartItems.get(position).getMaxQuantity());
         while (i < 5 && i < cartItems.get(position).getMaxQuantity()){
             quantity.add(Integer.toString(i+1));
             i++;
@@ -81,17 +82,17 @@ public class cartRecAdpt extends RecyclerView.Adapter<cartRecAdpt.cartViewHolder
         //set selected quantity
         holder.itemQuantity.setSelection(cartItems.get(position).getQuantity() - 1);
 
-        holder.itemQuantity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                //cartViewModel.updateQuantity(cartItems.get(position), holder.itemQuantity.getSelectedItemPosition() + 1);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
+//        holder.itemQuantity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                //cartViewModel.updateQuantity(cartItems.get(position), holder.itemQuantity.getSelectedItemPosition() + 1);
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//
+//            }
+//        });
 
         //image
         if(cartItems.get(position).getItemPath() != null && !cartItems.get(position).getItemPath().isEmpty()){

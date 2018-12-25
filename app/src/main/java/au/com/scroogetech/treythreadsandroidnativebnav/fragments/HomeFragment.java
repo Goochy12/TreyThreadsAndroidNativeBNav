@@ -76,6 +76,8 @@ public class HomeFragment extends Fragment {
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                homeItems.clear();
+                
                 for(DataSnapshot categorySnapShot : dataSnapshot.getChildren()){
 
                     for (DataSnapshot itemSnapShot : categorySnapShot.getChildren()){

@@ -63,6 +63,9 @@ public class StoreFragment extends Fragment {
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                stockList.clear();
+                stockProperties.clear();
+
                 for(DataSnapshot categorySnapShot : dataSnapshot.getChildren()){
 
                     for (DataSnapshot typeSnapShot : categorySnapShot.getChildren()){

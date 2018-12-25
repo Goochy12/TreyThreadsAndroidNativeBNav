@@ -177,7 +177,7 @@ public class storeRecAdpt extends RecyclerView.Adapter<storeRecAdpt.storeViewHol
                 String price;
                 String pa;
                 String colour;
-                int maxQuantity = quantityList.get(colourSpinnerPos).get(holder.sizeList.getSelectedItemPosition());
+                int maxQuantity = quantityList.get(colourSpinnerPos).get(getMaxQuantPos(holder));
 
                 name = stockList.get(position).get(1);
                 pa = path.get(colourSpinnerPos);
@@ -237,6 +237,26 @@ public class storeRecAdpt extends RecyclerView.Adapter<storeRecAdpt.storeViewHol
     public String getSelectedColour(storeViewHolder holder){
         return holder.colourList.getSelectedItem().toString();
 //        return (int) holder.colourList.getSelectedItem();
+    }
+
+    public int getMaxQuantPos(storeViewHolder holder){
+        String size = holder.sizeList.getSelectedItem().toString();
+        int pos = 0;
+
+        if (size.equals("S")){
+            pos = 0;
+        }
+        if (size.equals("M")){
+            pos = 1;
+        }
+        if (size.equals("L")){
+            pos = 2;
+        }
+        if (size.equals("XL")){
+            pos = 3;
+        }
+
+        return pos;
     }
 
     public void setImage(String path, storeViewHolder holder){
