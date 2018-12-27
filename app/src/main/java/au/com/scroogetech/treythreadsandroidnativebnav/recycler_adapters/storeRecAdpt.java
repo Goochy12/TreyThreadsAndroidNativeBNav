@@ -103,7 +103,7 @@ public class storeRecAdpt extends RecyclerView.Adapter<storeRecAdpt.storeViewHol
 //                Log.i("OHERE", "XL: " + tempSizes.get(3));
 //                Log.i("OHERE", "XL: ");
 
-                path.add(stockProperties.get(i).get(7));
+                path.add(stockProperties.get(i).get(3));
                 productIDList.add(stockProperties.get(i).get(0));
 
             }

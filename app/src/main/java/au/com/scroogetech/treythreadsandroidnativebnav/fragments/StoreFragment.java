@@ -90,21 +90,13 @@ public class StoreFragment extends Fragment {
                                 String colourID = eachColour.child("colourID").getValue().toString();
                                 String colour = eachColour.getKey();
 //                                Log.i("OHERE", "Name: " + name + ", Colour: " + colour);
-//                            String back_path = typeSnapShot.child("image_back").getValue().toString();
-                                String S = eachColour.child("S").getValue().toString();
-                                String M = eachColour.child("M").getValue().toString();
-                                String L = eachColour.child("L").getValue().toString();
-                                String XL = eachColour.child("XL").getValue().toString();
                                 String front_path = eachColour.child("image_front").getValue(String.class);
+//                            String back_path = typeSnapShot.child("image_back").getValue().toString();
 
                                 specifics.add(productID);
                                 specifics.add(colourID);
 //                                Log.i("OHERE", "onDataChange: " + colourID);
                                 specifics.add(formatName(colour));
-                                specifics.add(S);
-                                specifics.add(M);
-                                specifics.add(L);
-                                specifics.add(XL);
                                 specifics.add(front_path);
 //                            specifics.add(back_path);
 
