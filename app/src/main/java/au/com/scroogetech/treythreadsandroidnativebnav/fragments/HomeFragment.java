@@ -31,11 +31,6 @@ public class HomeFragment extends Fragment {
     private RecyclerView.Adapter homeRecyclerAdapter;
     private RecyclerView.LayoutManager homeRecyclerLayoutManager;
 
-    private Parcelable recLayoutState;
-    private Bundle recBundle;
-    private static String LIST_STATE = "LIST_STATE";
-    private static String TAG = "LIST_STATE";
-
     private ArrayList<ArrayList<String>> homeItems = new ArrayList<>();
 
     public HomeFragment(){

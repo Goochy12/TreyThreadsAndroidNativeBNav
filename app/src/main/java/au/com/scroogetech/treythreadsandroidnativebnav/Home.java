@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import au.com.scroogetech.treythreadsandroidnativebnav.fragments.AboutFragment;
 import au.com.scroogetech.treythreadsandroidnativebnav.fragments.CartFragment;
 import au.com.scroogetech.treythreadsandroidnativebnav.fragments.AccountFragment;
 import au.com.scroogetech.treythreadsandroidnativebnav.fragments.ContactFragment;
@@ -38,6 +39,8 @@ public class Home extends AppCompatActivity {
     private Fragment cartFrag = new CartFragment();
     private Fragment accountFrag = new AccountFragment();
     private Fragment contactFrag = new ContactFragment();
+    private Fragment aboutFrag = new AboutFragment();
+//    private Fragment settingsFrag = new SettingsFragment();
     private Fragment active;
 
 
@@ -169,6 +172,7 @@ public class Home extends AppCompatActivity {
             fragMan.beginTransaction().add(R.id.fragmentLayout, cartFrag).hide(cartFrag).commit();
             fragMan.beginTransaction().add(R.id.fragmentLayout, accountFrag).hide(accountFrag).commit();
             fragMan.beginTransaction().add(R.id.fragmentLayout, contactFrag).hide(contactFrag).commit();
+            fragMan.beginTransaction().add(R.id.fragmentLayout, aboutFrag).hide(aboutFrag).commit();
 
 
 //        }else {
@@ -209,8 +213,18 @@ public class Home extends AppCompatActivity {
 
                 return true;
             case R.id.navigation_settings:
+
                 return true;
             case R.id.navigation_about:
+                contactItem.setIcon(R.drawable.contact_clicked);
+                accountItem.setIcon(R.drawable.user_default);
+                homeItem.setIcon(R.drawable.homedefault);
+                storeItem.setIcon(R.drawable.storedefault);
+                cartItem.setIcon(R.drawable.cartdefault);
+
+                //load about fragment
+                fragMan.beginTransaction().hide(active).show(aboutFrag).commit();
+                active = aboutFrag;
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
