@@ -3,8 +3,9 @@ package au.com.scroogetech.treythreadsandroidnativebnav;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
-import android.util.Log;
+import android.os.AsyncTask;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import au.com.scroogetech.treythreadsandroidnativebnav.cart_data.CartItem;
@@ -31,13 +32,11 @@ public class CartViewModel extends AndroidViewModel {
     public void deleteItem(CartItem cartItem){
         cartRepository.deleteCartItem(cartItem);}
 
-    public CartItem getSameItem(String name, String size){
-        return cartRepository.getSameItem(name,size);
-    }
+//    public List<CartItem> getSameItem(CartItem cartItem){
+//        return cartRepository.getSameItem(cartItem);
+//    }
 
     public void updateQuantity(CartItem cartItem, int quantity){
-        Log.i("OHERE", "updateQuantity: ");
-        cartRepository.updateQuantity(cartItem,quantity);
-        Log.i("OHERE", "updateQuantity:2 ");
+        cartRepository.updateQuantity(cartItem, quantity);
     }
 }

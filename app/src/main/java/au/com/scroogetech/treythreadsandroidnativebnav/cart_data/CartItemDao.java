@@ -5,6 +5,7 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 
 import java.util.List;
 
@@ -25,9 +26,10 @@ public interface CartItemDao {
     void deleteAllCartItems();
 
     //check same item
-    @Query("SELECT * FROM CART_TABLE where itemName = :name and itemSize = :size")
-    CartItem getSameItem(String name, String size);
+    @Query("SELECT * FROM CART_TABLE where itemName = :name and itemSize = :size and colour = :colour")
+    CartItem getSameItem(String name, String size, String colour);
 
+//    @Update(onConflict = OnConflictStrategy.REPLACE)
     @Query("UPDATE CART_TABLE SET quantity = :quan WHERE itemID = :id ")
     void updateQuantity(int id, int quan);
 }

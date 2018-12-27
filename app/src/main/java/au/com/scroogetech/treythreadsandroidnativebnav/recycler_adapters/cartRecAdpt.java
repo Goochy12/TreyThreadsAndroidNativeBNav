@@ -65,7 +65,7 @@ public class cartRecAdpt extends RecyclerView.Adapter<cartRecAdpt.cartViewHolder
         holder.itemColour.setText(cartItems.get(position).getColour());
 
         //quantity spinner
-        ArrayList<String> quantity = new ArrayList<>();
+        final ArrayList<String> quantity = new ArrayList<>();
 
         //add max quantity
         int i = 0;
@@ -83,9 +83,27 @@ public class cartRecAdpt extends RecyclerView.Adapter<cartRecAdpt.cartViewHolder
         //set selected quantity
         holder.itemQuantity.setSelection(cartItems.get(position).getQuantity() - 1);
 
+        final int[] firstSelection = new int[1];
+        final int[] secondSelection = new int[1];
+
+
+        firstSelection[0] = holder.itemQuantity.getSelectedItemPosition();
+
         holder.itemQuantity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int spinnerPosition, long id) {
+                secondSelection[0] = holder.itemQuantity.getSelectedItemPosition();
+
+                if (firstSelection[0] != secondSelection[0]){
+                    cartViewModel.updateQuantity(cartItems.get(position),holder.itemQuantity.getSelectedItemPosition() + 1);
+                    firstSelection[0] = secondSelection[0];
+                }
+//                CartItem newCI = cartItems.get(position);
+//                newCI.setQuantity(holder.itemQuantity.getSelectedItemPosition() + 1);
+//                cartViewModel.deleteItem(cartItems.get(position));
+//                cartViewModel.insert(newCI);
+//                cartViewModel.updateQuantity(newCI);
+//                Log.i("OHERE", "onItemSelected: ");
 //                cartViewModel.updateQuantity(cartItems.get(position), holder.itemQuantity.getSelectedItemPosition() + 1);
                 //updateQuan(position, holder.itemQuantity.getSelectedItemPosition() + 1);
             }
@@ -160,10 +178,6 @@ public class cartRecAdpt extends RecyclerView.Adapter<cartRecAdpt.cartViewHolder
             itemQuantity = (Spinner) itemView.findViewById(R.id.cartCardSpinner);
             removeButton = (ImageView) itemView.findViewById(R.id.removeFromCartButton);
         }
-    }
-
-    public void updateQuan(int position, int quantity){
-        cartViewModel.updateQuantity(cartItems.get(position), quantity);
     }
 
 }

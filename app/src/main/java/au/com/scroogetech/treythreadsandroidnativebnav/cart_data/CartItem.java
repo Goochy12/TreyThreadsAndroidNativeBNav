@@ -18,8 +18,9 @@ public class CartItem {
     private int quantity;
     private int maxQuantity;
     private String colour;
+    private String productID;
 
-    public CartItem(String itemName, String itemSize, String itemPrice, String itemPath, int quantity, int maxQuantity, String colour){
+    public CartItem(String itemName, String itemSize, String itemPrice, String itemPath, int quantity, int maxQuantity, String colour, String productID){
         this.itemName = itemName;
         this.itemSize = itemSize;
         //this.itemSizeList = itemSizeList;
@@ -29,6 +30,7 @@ public class CartItem {
         this.maxQuantity = maxQuantity;
 
         this.colour = colour;
+        this.productID = productID;
     }
 
     public int getItemID() {
@@ -101,5 +103,13 @@ public class CartItem {
 
     public void setColour(String colour) {
         this.colour = colour;
+    }
+
+    public String getProductID() {
+        return productID;
+    }
+
+    public void setProductID(String productID) {
+        this.productID = productID;
     }
 }

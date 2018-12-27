@@ -30,6 +30,7 @@ public class StoreFragment extends Fragment {
 
     private ArrayList<ArrayList<String>> stockList = new ArrayList<>();
     private ArrayList<ArrayList<String>> stockProperties = new ArrayList<>();
+    private ArrayList<ArrayList<String>> stockQuantities = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,16 +52,16 @@ public class StoreFragment extends Fragment {
         storeRecycler.setLayoutManager(storeRecyclerLayoutManager);
 
         //specify adapter
-        storeRecyclerAdapter = new storeRecAdpt(this.getActivity(), stockList, stockProperties);
+        storeRecyclerAdapter = new storeRecAdpt(this.getActivity(), stockList, stockProperties, stockQuantities);
         storeRecycler.setAdapter(storeRecyclerAdapter);
 
 
 
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        final DatabaseReference myRef = database.getReference("stock");
+        final DatabaseReference stockRef = database.getReference("stock");
 
-        myRef.addValueEventListener(new ValueEventListener() {
+        stockRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 stockList.clear();
@@ -83,9 +84,10 @@ public class StoreFragment extends Fragment {
 
                         for (DataSnapshot eachColour : typeSnapShot.getChildren()){
                             ArrayList<String> specifics = new ArrayList<>();
-                            if (eachColour.child("id").exists()) {
+                            if (eachColour.child("colourID").exists()) {
 
-                                String colourID = eachColour.child("id").getValue().toString();
+                                String productID = eachColour.child("productID").getValue().toString();
+                                String colourID = eachColour.child("colourID").getValue().toString();
                                 String colour = eachColour.getKey();
 //                                Log.i("OHERE", "Name: " + name + ", Colour: " + colour);
 //                            String back_path = typeSnapShot.child("image_back").getValue().toString();
@@ -95,7 +97,9 @@ public class StoreFragment extends Fragment {
                                 String XL = eachColour.child("XL").getValue().toString();
                                 String front_path = eachColour.child("image_front").getValue(String.class);
 
+                                specifics.add(productID);
                                 specifics.add(colourID);
+//                                Log.i("OHERE", "onDataChange: " + colourID);
                                 specifics.add(formatName(colour));
                                 specifics.add(S);
                                 specifics.add(M);
@@ -110,6 +114,28 @@ public class StoreFragment extends Fragment {
                     }
                 }
                 storeRecyclerAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        DatabaseReference quantityRef = database.getReference("stock_quantities");
+        quantityRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                stockQuantities.clear();
+                for(DataSnapshot productIDSnapshot : dataSnapshot.getChildren()) {
+                    String productID = productIDSnapshot.getKey();
+                    String quantity = productIDSnapshot.getValue().toString();
+
+                    ArrayList<String> productQuan = new ArrayList<>();
+                    productQuan.add(productID);
+                    productQuan.add(quantity);
+                    stockQuantities.add(productQuan);
+                }
             }
 
             @Override

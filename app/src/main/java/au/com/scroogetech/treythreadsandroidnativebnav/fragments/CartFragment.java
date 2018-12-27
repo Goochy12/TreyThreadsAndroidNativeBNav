@@ -57,12 +57,6 @@ public class CartFragment extends Fragment {
         cartRecyclerAdapter = new cartRecAdpt(this.getActivity());
         cartRecycler.setAdapter(cartRecyclerAdapter);
 
-        //String[] productList = loadData();
-        //String[] productList = {"New Stock", "Selling Fast", "Social Media"};
-
-
-
-
         cartEmptyTextView = (TextView) view.findViewById(R.id.cartEmptyMessage);
         checkoutButton = (Button) view.findViewById(R.id.checkoutButton);
         checkoutButton.setBackgroundColor(getResources().getColor(android.R.color.black));
@@ -81,25 +75,5 @@ public class CartFragment extends Fragment {
                 }
             }
         });
-
-
-//        cartDatabaseHelper dbHelper = new cartDatabaseHelper(getActivity());
-////        dbHelper.openDatabase();
-////        dbHelper.getReadableDatabase();
-//        int products = dbHelper.getProductCount();
-//        productList = dbHelper.getProducts();
-//        productList = formatNames(productList);
-//
-//        String[] productImagePath = dbHelper.getProductImagePath();
-
-
-        //specify adapter
-
-
-//        if (recLayoutState != null){
-//            Log.i(TAG, "onViewCreated: ");
-//            cartRecyclerLayoutManager.onRecartInstanceState(recLayoutState);
-//        }
     }
-
 }
