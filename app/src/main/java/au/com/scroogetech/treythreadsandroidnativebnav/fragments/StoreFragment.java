@@ -127,6 +127,7 @@ public class StoreFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 stockQuantities.clear();
+
                 for(DataSnapshot productIDSnapshot : dataSnapshot.getChildren()) {
                     String productID = productIDSnapshot.getKey();
                     String quantity = productIDSnapshot.getValue().toString();
@@ -136,6 +137,7 @@ public class StoreFragment extends Fragment {
                     productQuan.add(quantity);
                     stockQuantities.add(productQuan);
                 }
+                storeRecyclerAdapter.notifyDataSetChanged();
             }
 
             @Override

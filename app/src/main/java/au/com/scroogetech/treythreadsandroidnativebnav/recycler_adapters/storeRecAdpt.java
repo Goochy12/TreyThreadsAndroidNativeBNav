@@ -101,6 +101,7 @@ public class storeRecAdpt extends RecyclerView.Adapter<storeRecAdpt.storeViewHol
 //                Log.i("OHERE", "M: " + tempSizes.get(1));
 //                Log.i("OHERE", "L: " + tempSizes.get(2));
 //                Log.i("OHERE", "XL: " + tempSizes.get(3));
+//                Log.i("OHERE", "XL: ");
 
                 path.add(stockProperties.get(i).get(7));
                 productIDList.add(stockProperties.get(i).get(0));
@@ -122,7 +123,7 @@ public class storeRecAdpt extends RecyclerView.Adapter<storeRecAdpt.storeViewHol
             tempSizes.add(0);
             tempSizes.add(0);
             tempSizes.add(0);
-            finished.clear();
+            finished = new ArrayList<>();
 
             while (finished.size() < 4 && j < stockQuantities.size()){
                 s = productIDList.get(i) + "-s";
@@ -240,7 +241,6 @@ public class storeRecAdpt extends RecyclerView.Adapter<storeRecAdpt.storeViewHol
                 int maxQuantity;
 
                 maxQuantity = quantityList.get(colourSpinnerPos).get(getMaxQuantPos(holder));
-                Log.i("OHERE", "onClick: " + maxQuantity);
 
                 name = stockList.get(position).get(1);
                 pa = path.get(colourSpinnerPos);
