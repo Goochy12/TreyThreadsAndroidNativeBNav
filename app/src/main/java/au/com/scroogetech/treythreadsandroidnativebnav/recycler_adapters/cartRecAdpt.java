@@ -5,6 +5,8 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -17,6 +19,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -41,10 +44,15 @@ public class cartRecAdpt extends RecyclerView.Adapter<cartRecAdpt.cartViewHolder
     private Context context;
     private ArrayList<ArrayList<String>> stockQuantities = new ArrayList<>();
 
+    private View snackBarView;
+
+    private int runningTotal = 0;
+
     //constructor
-    public cartRecAdpt(Context context, ArrayList<ArrayList<String>> stockQuantities){
+    public cartRecAdpt(Context context, ArrayList<ArrayList<String>> stockQuantities, View snackBarView){
         this.context = context;
         this.stockQuantities = stockQuantities;
+        this.snackBarView = snackBarView;
     }
 
     //create views
@@ -95,17 +103,19 @@ public class cartRecAdpt extends RecyclerView.Adapter<cartRecAdpt.cartViewHolder
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         holder.itemQuantity.setAdapter(spinnerAdapter);
+
+        Toast notifyQuantityChanged = Toast.makeText(context, "Quantity updated...", Toast.LENGTH_SHORT);
         //set selected quantity
         int selection = cartItems.get(position).getQuantity() - 1;
         if (maxQuan == 0){
-            holder.checkoutButton.setEnabled(false);
+            cartViewModel.deleteItem(cartItems.get(position));
+            notifyQuantityChanged.show();
         }else if (selection >= maxQuan){
             selection = maxQuan - 1;
 
             //NOTIFY QUANTITY CHANGED
-        cartViewModel.updateQuantity(cartItems.get(position), selection + 1);
-
-
+            cartViewModel.updateQuantity(cartItems.get(position), selection + 1);
+            notifyQuantityChanged.show();
         }
         holder.itemQuantity.setSelection(selection);
 
@@ -148,6 +158,8 @@ public class cartRecAdpt extends RecyclerView.Adapter<cartRecAdpt.cartViewHolder
             public void onClick(View v) {
                 cartViewModel.deleteItem(cartItems.get(position));
                 notifyDataSetChanged();
+
+
             }
         });
     }
@@ -184,7 +196,6 @@ public class cartRecAdpt extends RecyclerView.Adapter<cartRecAdpt.cartViewHolder
         public TextView itemColour;
         public ImageView removeButton;
         public Spinner itemQuantity;
-        public Button checkoutButton;
 
 
         public cartViewHolder(View itemView){
@@ -197,13 +208,34 @@ public class cartRecAdpt extends RecyclerView.Adapter<cartRecAdpt.cartViewHolder
             itemImage = (ImageView) itemView.findViewById(R.id.cartCardImage);
             itemQuantity = (Spinner) itemView.findViewById(R.id.cartCardSpinner);
             removeButton = (ImageView) itemView.findViewById(R.id.removeFromCartButton);
-            checkoutButton = (Button) itemView.findViewById(R.id.checkoutButton);
         }
     }
 
     public void setPrice(cartViewHolder holder, int position){
         int price = Integer.parseInt(cartItems.get(position).getItemPrice()) * cartItems.get(position).getQuantity();
         holder.itemPrice.setText("$" + (price));
+    }
+
+    public int getRunningTotal(){
+        int total = 0;
+        for (int i = 0; i < cartItems.size(); i++){
+            total += (Integer.parseInt(cartItems.get(i).getItemPrice()) * cartItems.get(i).getQuantity());
+        }
+        this.runningTotal = total;
+        return this.runningTotal;
+    }
+
+    public boolean validateCart(){
+        boolean valid = true;
+
+        for (int i = 0; i < cartItems.size(); i++){
+            if (cartItems.get(i).getQuantity() <= 0){
+                valid = false;
+                return valid;
+            }
+        }
+
+        return valid;
     }
 
 }

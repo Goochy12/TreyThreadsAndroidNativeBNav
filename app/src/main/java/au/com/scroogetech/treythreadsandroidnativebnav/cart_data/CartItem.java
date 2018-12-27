@@ -16,18 +16,16 @@ public class CartItem {
     private String itemPrice;
     private String itemPath;
     private int quantity;
-    private int maxQuantity;
     private String colour;
     private String productID;
 
-    public CartItem(String itemName, String itemSize, String itemPrice, String itemPath, int quantity, int maxQuantity, String colour, String productID){
+    public CartItem(String itemName, String itemSize, String itemPrice, String itemPath, int quantity, String colour, String productID){
         this.itemName = itemName;
         this.itemSize = itemSize;
         //this.itemSizeList = itemSizeList;
         this.itemPrice = itemPrice;
         this.itemPath = itemPath;
         this.quantity = quantity;
-        this.maxQuantity = maxQuantity;
 
         this.colour = colour;
         this.productID = productID;
@@ -87,14 +85,6 @@ public class CartItem {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
-    }
-
-    public int getMaxQuantity() {
-        return maxQuantity;
-    }
-
-    public void setMaxQuantity(int maxQuantity) {
-        this.maxQuantity = maxQuantity;
     }
 
     public String getColour() {

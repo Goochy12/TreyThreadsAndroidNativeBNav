@@ -45,7 +45,7 @@ public class CartRepository {
         @Override
         protected Void doInBackground(final CartItem... params){
             CartItem newCartItem = new CartItem(params[0].getItemName(),params[0].getItemSize(),params[0].getItemPrice(),params[0].getItemPath(),
-                    params[0].getQuantity(), params[0].getMaxQuantity(), params[0].getColour(),params[0].getProductID());
+                    params[0].getQuantity(), params[0].getColour(),params[0].getProductID());
             mAsyncCartDao.insertCartItem(newCartItem);
 
             return null;

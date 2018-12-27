@@ -60,16 +60,16 @@ public class CartFragment extends Fragment {
         cartRecycler = (RecyclerView) view.findViewById(R.id.cartRecyclerView);
         //cartRecycler.setHasFixedSize(true);
 
+        cartEmptyTextView = (TextView) view.findViewById(R.id.cartEmptyMessage);
+        checkoutButton = (Button) view.findViewById(R.id.checkoutButton);
+        checkoutButton.setBackgroundColor(getResources().getColor(android.R.color.black));
+
         //use a linear layout
         cartRecyclerLayoutManager = new LinearLayoutManager(getActivity());
         cartRecycler.setLayoutManager(cartRecyclerLayoutManager);
 
-        cartRecyclerAdapter = new cartRecAdpt(this.getActivity(), stockQuantities);
+        cartRecyclerAdapter = new cartRecAdpt(this.getActivity(), stockQuantities, getActivity().findViewById(R.id.homeFragmentConstraintLayout));
         cartRecycler.setAdapter(cartRecyclerAdapter);
-
-        cartEmptyTextView = (TextView) view.findViewById(R.id.cartEmptyMessage);
-        checkoutButton = (Button) view.findViewById(R.id.checkoutButton);
-        checkoutButton.setBackgroundColor(getResources().getColor(android.R.color.black));
 
         cartViewModel = ViewModelProviders.of((FragmentActivity) this.getContext()).get(CartViewModel.class);
         cartViewModel.getAllItems().observe(this, new Observer<List<CartItem>>() {
@@ -79,6 +79,9 @@ public class CartFragment extends Fragment {
                 if (cartItems.size() > 0){
                     cartEmptyTextView.setVisibility(View.INVISIBLE);
                     checkoutButton.setVisibility(View.VISIBLE);
+
+
+                    checkoutButton.setText("Checkout - $" + cartRecyclerAdapter.getRunningTotal());
                 }else{
                     cartEmptyTextView.setVisibility(View.VISIBLE);
                     checkoutButton.setVisibility(View.INVISIBLE);

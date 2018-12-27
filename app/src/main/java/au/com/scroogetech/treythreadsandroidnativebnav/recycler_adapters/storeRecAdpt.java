@@ -248,7 +248,7 @@ public class storeRecAdpt extends RecyclerView.Adapter<storeRecAdpt.storeViewHol
                 colour = getSelectedColour(holder);
                 productID = productIDList.get(holder.colourList.getSelectedItemPosition()) + "-" + getSelectedSize(holder).toLowerCase();
 
-                cartItem = new CartItem(name,getSelectedSize(holder),price,pa,1,maxQuantity, colour, productID);
+                cartItem = new CartItem(name,getSelectedSize(holder),price,pa,1, colour, productID);
                 cartViewModel.insert(cartItem);
 //                Log.i("OHERE", "onClick: ");
 //                    List<CartItem> sameItem = cartViewModel.getSameItem(cartItem);
