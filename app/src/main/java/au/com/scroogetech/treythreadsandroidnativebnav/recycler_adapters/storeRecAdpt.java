@@ -237,7 +237,7 @@ public class storeRecAdpt extends RecyclerView.Adapter<storeRecAdpt.storeViewHol
                 String price;
                 String pa;
                 String colour;
-                String procuctID;
+                String productID;
                 int maxQuantity;
 
                 maxQuantity = quantityList.get(colourSpinnerPos).get(getMaxQuantPos(holder));
@@ -246,9 +246,9 @@ public class storeRecAdpt extends RecyclerView.Adapter<storeRecAdpt.storeViewHol
                 pa = path.get(colourSpinnerPos);
                 price = stockList.get(position).get(2);
                 colour = getSelectedColour(holder);
-                procuctID = productIDList.get(holder.colourList.getSelectedItemPosition()) + "-" + getSelectedSize(holder).toLowerCase();
+                productID = productIDList.get(holder.colourList.getSelectedItemPosition()) + "-" + getSelectedSize(holder).toLowerCase();
 
-                cartItem = new CartItem(name,getSelectedSize(holder),price,pa,1,maxQuantity, colour, procuctID);
+                cartItem = new CartItem(name,getSelectedSize(holder),price,pa,1,maxQuantity, colour, productID);
                 cartViewModel.insert(cartItem);
 //                Log.i("OHERE", "onClick: ");
 //                    List<CartItem> sameItem = cartViewModel.getSameItem(cartItem);

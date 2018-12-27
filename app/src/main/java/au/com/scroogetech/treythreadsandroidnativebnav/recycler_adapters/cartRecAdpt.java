@@ -13,10 +13,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
 import java.io.InputStream;
@@ -36,11 +39,12 @@ public class cartRecAdpt extends RecyclerView.Adapter<cartRecAdpt.cartViewHolder
     private List<CartItem> cartItems = Collections.emptyList();
     private CartViewModel cartViewModel;
     private Context context;
-    private Boolean first = true;
+    private ArrayList<ArrayList<String>> stockQuantities = new ArrayList<>();
 
     //constructor
-    public cartRecAdpt(Context context){
+    public cartRecAdpt(Context context, ArrayList<ArrayList<String>> stockQuantities){
         this.context = context;
+        this.stockQuantities = stockQuantities;
     }
 
     //create views
@@ -60,19 +64,30 @@ public class cartRecAdpt extends RecyclerView.Adapter<cartRecAdpt.cartViewHolder
     public void onBindViewHolder(@NonNull final cartViewHolder holder, final int position){
 
         holder.itemText.setText(cartItems.get(position).getItemName());
-        holder.itemPrice.setText("$" + cartItems.get(position).getItemPrice().toString());
         holder.itemSize.setText(cartItems.get(position).getItemSize());
         holder.itemColour.setText(cartItems.get(position).getColour());
 
         //quantity spinner
         final ArrayList<String> quantity = new ArrayList<>();
 
+        //find product max quantity
+        ArrayList<String> product = new ArrayList<>();
+        int p = 0;
+        while (product.isEmpty()){
+            if (cartItems.get(position).getProductID().equals(stockQuantities.get(p).get(0))){
+                product.add(stockQuantities.get(p).get(0));
+                product.add(stockQuantities.get(p).get(1));
+            }else{
+                p++;
+            }
+        }
+
         //add max quantity
-        int i = 0;
+        int maxQuan = 0;
 //        Log.i("OHERE", "onBindViewHolder: " + cartItems.get(position).getMaxQuantity());
-        while (i < 5 && i < cartItems.get(position).getMaxQuantity()){
-            quantity.add(Integer.toString(i+1));
-            i++;
+        while (maxQuan < 5 && maxQuan < Integer.parseInt(product.get(1))){
+            quantity.add(Integer.toString(maxQuan+1));
+            maxQuan++;
         }
 
 
@@ -81,7 +96,18 @@ public class cartRecAdpt extends RecyclerView.Adapter<cartRecAdpt.cartViewHolder
 
         holder.itemQuantity.setAdapter(spinnerAdapter);
         //set selected quantity
-        holder.itemQuantity.setSelection(cartItems.get(position).getQuantity() - 1);
+        int selection = cartItems.get(position).getQuantity() - 1;
+        if (maxQuan == 0){
+            holder.checkoutButton.setEnabled(false);
+        }else if (selection >= maxQuan){
+            selection = maxQuan - 1;
+
+            //NOTIFY QUANTITY CHANGED
+        cartViewModel.updateQuantity(cartItems.get(position), selection + 1);
+
+
+        }
+        holder.itemQuantity.setSelection(selection);
 
         final int[] firstSelection = new int[1];
         final int[] secondSelection = new int[1];
@@ -97,15 +123,11 @@ public class cartRecAdpt extends RecyclerView.Adapter<cartRecAdpt.cartViewHolder
                 if (firstSelection[0] != secondSelection[0]){
                     cartViewModel.updateQuantity(cartItems.get(position),holder.itemQuantity.getSelectedItemPosition() + 1);
                     firstSelection[0] = secondSelection[0];
+
+                    setPrice(holder, position);
                 }
-//                CartItem newCI = cartItems.get(position);
-//                newCI.setQuantity(holder.itemQuantity.getSelectedItemPosition() + 1);
-//                cartViewModel.deleteItem(cartItems.get(position));
-//                cartViewModel.insert(newCI);
-//                cartViewModel.updateQuantity(newCI);
-//                Log.i("OHERE", "onItemSelected: ");
-//                cartViewModel.updateQuantity(cartItems.get(position), holder.itemQuantity.getSelectedItemPosition() + 1);
-                //updateQuan(position, holder.itemQuantity.getSelectedItemPosition() + 1);
+//
+
             }
 
             @Override
@@ -114,6 +136,7 @@ public class cartRecAdpt extends RecyclerView.Adapter<cartRecAdpt.cartViewHolder
             }
         });
 
+        setPrice(holder,position);
 
         //image
         if(cartItems.get(position).getItemPath() != null && !cartItems.get(position).getItemPath().isEmpty()){
@@ -149,10 +172,6 @@ public class cartRecAdpt extends RecyclerView.Adapter<cartRecAdpt.cartViewHolder
         notifyDataSetChanged();
     }
 
-    public void hello(){
-
-    }
-
     public List<CartItem> getUpdatedTasks(){return this.cartItems;}
 
     //create the view holder
@@ -165,6 +184,7 @@ public class cartRecAdpt extends RecyclerView.Adapter<cartRecAdpt.cartViewHolder
         public TextView itemColour;
         public ImageView removeButton;
         public Spinner itemQuantity;
+        public Button checkoutButton;
 
 
         public cartViewHolder(View itemView){
@@ -177,7 +197,13 @@ public class cartRecAdpt extends RecyclerView.Adapter<cartRecAdpt.cartViewHolder
             itemImage = (ImageView) itemView.findViewById(R.id.cartCardImage);
             itemQuantity = (Spinner) itemView.findViewById(R.id.cartCardSpinner);
             removeButton = (ImageView) itemView.findViewById(R.id.removeFromCartButton);
+            checkoutButton = (Button) itemView.findViewById(R.id.checkoutButton);
         }
+    }
+
+    public void setPrice(cartViewHolder holder, int position){
+        int price = Integer.parseInt(cartItems.get(position).getItemPrice()) * cartItems.get(position).getQuantity();
+        holder.itemPrice.setText("$" + (price));
     }
 
 }
