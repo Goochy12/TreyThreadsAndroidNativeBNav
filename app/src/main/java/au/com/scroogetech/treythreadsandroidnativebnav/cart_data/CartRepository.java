@@ -27,9 +27,9 @@ public class CartRepository {
     public void deleteAllCartItems(){new deleteAllAsyncTask(mCartItemDao).execute();}
     public void deleteCartItem(CartItem cartItem){new deleteItemAsyncTask(mCartItemDao).execute(cartItem);}
 
-//    public List<CartItem> getSameItem(CartItem cartItem){
-//        return mCartItemDao.getSameItem(cartItem.getItemName(),cartItem.getItemSize(),cartItem.getColour());
-//    }
+    public List<CartItem> getSameItem(String productID){
+        return mCartItemDao.getSameItem(productID);
+    }
 
     public void updateQuantity(CartItem cartItem, int quantity){
 //        mCartItemDao.updateQuantity(cartItem.getItemID(),quantity);

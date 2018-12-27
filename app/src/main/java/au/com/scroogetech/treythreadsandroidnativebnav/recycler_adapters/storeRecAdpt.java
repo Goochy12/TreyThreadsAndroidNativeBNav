@@ -1,5 +1,6 @@
 package au.com.scroogetech.treythreadsandroidnativebnav.recycler_adapters;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -238,9 +239,6 @@ public class storeRecAdpt extends RecyclerView.Adapter<storeRecAdpt.storeViewHol
                 String pa;
                 String colour;
                 String productID;
-                int maxQuantity;
-
-                maxQuantity = quantityList.get(colourSpinnerPos).get(getMaxQuantPos(holder));
 
                 name = stockList.get(position).get(1);
                 pa = path.get(colourSpinnerPos);
@@ -249,7 +247,14 @@ public class storeRecAdpt extends RecyclerView.Adapter<storeRecAdpt.storeViewHol
                 productID = productIDList.get(holder.colourList.getSelectedItemPosition()) + "-" + getSelectedSize(holder).toLowerCase();
 
                 cartItem = new CartItem(name,getSelectedSize(holder),price,pa,1, colour, productID);
-                cartViewModel.insert(cartItem);
+
+                List<CartItem> sameItems = cartViewModel.getSameItem(productID);
+                if (sameItems.size() <= 0){
+                    cartViewModel.insert(cartItem);
+                }else{
+                    cartViewModel.updateQuantity(sameItems.get(0),sameItems.get(0).getQuantity() + 1);
+                }
+
 //                Log.i("OHERE", "onClick: ");
 //                    List<CartItem> sameItem = cartViewModel.getSameItem(cartItem);
 //                Log.i("OHERE", "onClick1: ");
@@ -263,6 +268,18 @@ public class storeRecAdpt extends RecyclerView.Adapter<storeRecAdpt.storeViewHol
 ////                }
             }
         });
+//
+//        String checkID = productIDList.get(holder.colourList.getSelectedItemPosition()) + "-" + getSelectedSize(holder).toLowerCase();
+//        List<CartItem> testItems = cartViewModel.getSameItem(checkID);
+//        int maxQuantity = quantityList.get(colourSpinnerPos).get(getMaxQuantPos(holder));
+//
+//        if (testItems.size() > 0 && testItems.get(0).getQuantity() + 1 >= maxQuantity){
+//            holder.addToCartButton.setEnabled(false);
+//            holder.sizeList.setEnabled(false);
+//        }else{
+//            holder.addToCartButton.setEnabled(true);
+//            holder.sizeList.setEnabled(true);
+//        }
     }
 
     public static Drawable LoadImageFromWeb(String url){

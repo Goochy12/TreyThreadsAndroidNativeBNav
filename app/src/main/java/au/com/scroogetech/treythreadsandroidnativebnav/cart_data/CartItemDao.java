@@ -26,8 +26,8 @@ public interface CartItemDao {
     void deleteAllCartItems();
 
     //check same item
-    @Query("SELECT * FROM CART_TABLE where itemName = :name and itemSize = :size and colour = :colour")
-    CartItem getSameItem(String name, String size, String colour);
+    @Query("SELECT * FROM CART_TABLE where productID = :productID")
+    List<CartItem> getSameItem(String productID);
 
 //    @Update(onConflict = OnConflictStrategy.REPLACE)
     @Query("UPDATE CART_TABLE SET quantity = :quan WHERE itemID = :id ")

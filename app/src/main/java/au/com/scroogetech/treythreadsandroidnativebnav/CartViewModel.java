@@ -32,9 +32,9 @@ public class CartViewModel extends AndroidViewModel {
     public void deleteItem(CartItem cartItem){
         cartRepository.deleteCartItem(cartItem);}
 
-//    public List<CartItem> getSameItem(CartItem cartItem){
-//        return cartRepository.getSameItem(cartItem);
-//    }
+    public List<CartItem> getSameItem(String productID){
+        return cartRepository.getSameItem(productID);
+    }
 
     public void updateQuantity(CartItem cartItem, int quantity){
         cartRepository.updateQuantity(cartItem, quantity);
