@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import au.com.liamgooch.treythreads.CartViewModel;
+import au.com.liamgooch.treythreads.PaymentProcessing;
 import au.com.liamgooch.treythreads.R;
 import au.com.liamgooch.treythreads.recycler_adapters.cartRecAdpt;
 import au.com.liamgooch.treythreads.cart_data.CartItem;
@@ -44,6 +45,8 @@ public class CartFragment extends Fragment {
 
     private CartItemDatabase db;
     private CartViewModel cartViewModel;
+
+    public PaymentProcessing paymentProcessing;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -113,5 +116,20 @@ public class CartFragment extends Fragment {
 
             }
         });
+
+        //PAYMENT PROCESSING
+        checkoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setupPaymentProcessing();
+            }
+        });
     }
+
+    public void setupPaymentProcessing(){
+        PaymentProcessing paymentProcessing = new PaymentProcessing(getActivity());
+        paymentProcessing.setupBraintreeAndStartExpressCheckout(String.valueOf(cartRecyclerAdapter.getRunningTotal()));
+    }
+
+
 }

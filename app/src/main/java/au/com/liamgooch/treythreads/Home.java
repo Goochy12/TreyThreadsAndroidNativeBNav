@@ -181,15 +181,6 @@ public class Home extends AppCompatActivity {
 //        }else {
 //
 //        }
-        //BRAINTREE PAYPAL
-        try {
-            mBraintreeFragment = BraintreeFragment.newInstance(this, "");
-            // mBraintreeFragment is ready to use!
-        } catch (InvalidArgumentException e) {
-            // There was an issue with your authorization string.
-            Log.i(TAG, "onCreate: ");
-        }
-
 
 
     }
