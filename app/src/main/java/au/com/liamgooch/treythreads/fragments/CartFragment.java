@@ -1,7 +1,9 @@
 package au.com.liamgooch.treythreads.fragments;
 
+import android.app.Activity;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,6 +17,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.braintreepayments.api.dropin.DropInActivity;
+import com.braintreepayments.api.dropin.DropInResult;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -47,6 +51,7 @@ public class CartFragment extends Fragment {
     private CartViewModel cartViewModel;
 
     public PaymentProcessing paymentProcessing;
+    private static final int REQUEST_CODE = 1234;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -124,6 +129,33 @@ public class CartFragment extends Fragment {
                 setupPaymentProcessing();
             }
         });
+
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                DropInResult result = data.getParcelableExtra(DropInResult.EXTRA_DROP_IN_RESULT);
+                // use the result to update your UI and send the payment method nonce to your server
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                // the user canceled
+            } else {
+                // handle errors here, an exception may be available in
+                Exception error = (Exception) data.getSerializableExtra(DropInActivity.EXTRA_ERROR);
+            }
+        }
     }
 
     public void setupPaymentProcessing(){
