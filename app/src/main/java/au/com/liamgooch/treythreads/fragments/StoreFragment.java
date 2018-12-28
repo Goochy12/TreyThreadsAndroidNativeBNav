@@ -1,11 +1,10 @@
-package au.com.scroogetech.treythreadsandroidnativebnav.fragments;
+package au.com.liamgooch.treythreads.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +17,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-import au.com.scroogetech.treythreadsandroidnativebnav.R;
-import au.com.scroogetech.treythreadsandroidnativebnav.recycler_adapters.storeRecAdpt;
+import au.com.liamgooch.treythreads.R;
+import au.com.liamgooch.treythreads.recycler_adapters.storeRecAdpt;
 
 
 public class StoreFragment extends Fragment {

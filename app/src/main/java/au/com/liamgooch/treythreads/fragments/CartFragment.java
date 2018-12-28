@@ -1,4 +1,4 @@
-package au.com.scroogetech.treythreadsandroidnativebnav.fragments;
+package au.com.liamgooch.treythreads.fragments;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
@@ -24,11 +24,11 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import au.com.scroogetech.treythreadsandroidnativebnav.CartViewModel;
-import au.com.scroogetech.treythreadsandroidnativebnav.R;
-import au.com.scroogetech.treythreadsandroidnativebnav.recycler_adapters.cartRecAdpt;
-import au.com.scroogetech.treythreadsandroidnativebnav.cart_data.CartItem;
-import au.com.scroogetech.treythreadsandroidnativebnav.cart_data.CartItemDatabase;
+import au.com.liamgooch.treythreads.CartViewModel;
+import au.com.liamgooch.treythreads.R;
+import au.com.liamgooch.treythreads.recycler_adapters.cartRecAdpt;
+import au.com.liamgooch.treythreads.cart_data.CartItem;
+import au.com.liamgooch.treythreads.cart_data.CartItemDatabase;
 
 
 public class CartFragment extends Fragment {

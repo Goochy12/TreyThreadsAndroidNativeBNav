@@ -1,4 +1,4 @@
-package au.com.scroogetech.treythreadsandroidnativebnav.cart_data;
+package au.com.liamgooch.treythreads.cart_data;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;

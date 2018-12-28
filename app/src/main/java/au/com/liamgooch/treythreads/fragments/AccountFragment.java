@@ -1,11 +1,11 @@
-package au.com.scroogetech.treythreadsandroidnativebnav.fragments;
+package au.com.liamgooch.treythreads.fragments;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import au.com.scroogetech.treythreadsandroidnativebnav.R;
+import au.com.liamgooch.treythreads.R;
 
 
 public class AccountFragment extends Fragment {

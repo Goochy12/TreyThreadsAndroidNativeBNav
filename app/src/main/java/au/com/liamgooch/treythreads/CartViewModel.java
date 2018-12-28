@@ -1,15 +1,13 @@
-package au.com.scroogetech.treythreadsandroidnativebnav;
+package au.com.liamgooch.treythreads;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
-import android.os.AsyncTask;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import au.com.scroogetech.treythreadsandroidnativebnav.cart_data.CartItem;
-import au.com.scroogetech.treythreadsandroidnativebnav.cart_data.CartRepository;
+import au.com.liamgooch.treythreads.cart_data.CartItem;
+import au.com.liamgooch.treythreads.cart_data.CartRepository;
 
 public class CartViewModel extends AndroidViewModel {
 

@@ -4,7 +4,7 @@ apply plugin: 'com.google.gms.google-services'
 android {
     compileSdkVersion 27
     defaultConfig {
-        applicationId "au.com.scroogetech.treythreadsandroidnativebnav"
+        applicationId "au.com.liamgooch.treythreads"
         minSdkVersion 23
         targetSdkVersion 27
         versionCode 1
@@ -49,8 +49,10 @@ dependencies {
     // Test helpers
     testImplementation "android.arch.persistence.room:testing:$room_version"
 
-    implementation "android.arch.lifecycle:extensions:1.1.0"
-    implementation "android.arch.lifecycle:viewmodel:1.1.0"
-    implementation 'com.google.firebase:firebase-database:16.0.1'
-    implementation 'com.google.firebase:firebase-database:16.0.1'
+    implementation "android.arch.lifecycle:extensions:1.1.1"
+    implementation "android.arch.lifecycle:viewmodel:1.1.1"
+    implementation 'com.google.firebase:firebase-database:16.0.5'
+    implementation 'com.google.firebase:firebase-database:16.0.5'
+
+    implementation 'com.braintreepayments.api:braintree:2.20.0'
 }

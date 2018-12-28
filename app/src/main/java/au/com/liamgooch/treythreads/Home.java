@@ -1,25 +1,26 @@
-package au.com.scroogetech.treythreadsandroidnativebnav;
+package au.com.liamgooch.treythreads;
 
-import android.app.ActionBar;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.internal.NavigationMenu;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import au.com.scroogetech.treythreadsandroidnativebnav.fragments.AboutFragment;
-import au.com.scroogetech.treythreadsandroidnativebnav.fragments.CartFragment;
-import au.com.scroogetech.treythreadsandroidnativebnav.fragments.AccountFragment;
-import au.com.scroogetech.treythreadsandroidnativebnav.fragments.ContactFragment;
-import au.com.scroogetech.treythreadsandroidnativebnav.fragments.HomeFragment;
-import au.com.scroogetech.treythreadsandroidnativebnav.fragments.StoreFragment;
+import com.braintreepayments.api.BraintreeFragment;
+import com.braintreepayments.api.exceptions.InvalidArgumentException;
+
+import au.com.liamgooch.treythreads.fragments.AboutFragment;
+import au.com.liamgooch.treythreads.fragments.CartFragment;
+import au.com.liamgooch.treythreads.fragments.AccountFragment;
+import au.com.liamgooch.treythreads.fragments.ContactFragment;
+import au.com.liamgooch.treythreads.fragments.HomeFragment;
+import au.com.liamgooch.treythreads.fragments.StoreFragment;
 
 public class Home extends AppCompatActivity {
 
@@ -44,7 +45,9 @@ public class Home extends AppCompatActivity {
     private Fragment active;
 
 
-    private static final String TAG = "Home";
+    private static final String TAG = "OHERE";
+    private BraintreeFragment mBraintreeFragment;
+    private static final String BRAINTREE_ACCESS_TOKEN = "access_token$sandbox$rrrnpdfp5mpm83zq$c4626caef58f28a29f18fdece41febc7";
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -178,6 +181,14 @@ public class Home extends AppCompatActivity {
 //        }else {
 //
 //        }
+        //BRAINTREE PAYPAL
+        try {
+            mBraintreeFragment = BraintreeFragment.newInstance(this, "");
+            // mBraintreeFragment is ready to use!
+        } catch (InvalidArgumentException e) {
+            // There was an issue with your authorization string.
+            Log.i(TAG, "onCreate: ");
+        }
 
 
 

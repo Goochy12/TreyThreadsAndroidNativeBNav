@@ -1,4 +1,4 @@
-package au.com.scroogetech.treythreadsandroidnativebnav;
+package au.com.liamgooch.treythreads;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

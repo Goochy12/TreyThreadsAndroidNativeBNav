@@ -8,6 +8,50 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:907805690862:android:20fb6ac0645d77c1",
+        "android_client_info": {
+          "package_name": "au.com.liamgooch.treythreads"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "907805690862-6t3ga53o2av3cb3dtn1li77ni71o616l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "au.com.liamgooch.treythreads",
+            "certificate_hash": "5a61ae0f6c87b68bffb91e91606dae0f5226a62f"
+          }
+        },
+        {
+          "client_id": "907805690862-7ai77629imfkdsdrf814rmonnjfongsq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBz1eCaIAgHxhoGd7grx8sa2FSORlheG6Y"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "907805690862-7ai77629imfkdsdrf814rmonnjfongsq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:907805690862:android:c6bcec2cd112edae",
         "android_client_info": {
           "package_name": "au.com.scroogetech.treythreadsandroidnativebnav"
