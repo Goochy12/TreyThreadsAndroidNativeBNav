@@ -138,7 +138,7 @@ public class Home extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        getSupportActionBar().setTitle("");
+//        getSupportActionBar().setTitle("");
 
 
         //fragment stuff
