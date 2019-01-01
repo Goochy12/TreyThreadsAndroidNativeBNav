@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -31,6 +32,8 @@ public class StoreFragment extends Fragment {
     private ArrayList<ArrayList<String>> stockProperties = new ArrayList<>();
     private ArrayList<ArrayList<String>> stockQuantities = new ArrayList<>();
 
+    private ProgressBar storeFragmentProgressBar;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -42,6 +45,10 @@ public class StoreFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstaceState){
         super.onViewCreated(view, savedInstaceState);
 
+        storeFragmentProgressBar = (ProgressBar) getActivity().findViewById(R.id.storeFragmentProgressBar);
+        storeFragmentProgressBar.setVisibility(View.VISIBLE);
+        storeFragmentProgressBar.animate();
+
         //get the recycler
         storeRecycler = (RecyclerView) view.findViewById(R.id.storeRecyclerView);
         //storeRecycler.setHasFixedSize(true);
@@ -51,11 +58,8 @@ public class StoreFragment extends Fragment {
         storeRecycler.setLayoutManager(storeRecyclerLayoutManager);
 
         //specify adapter
-        storeRecyclerAdapter = new storeRecAdpt(this.getActivity(), stockList, stockProperties, stockQuantities);
+        storeRecyclerAdapter = new storeRecAdpt(this.getActivity(), stockList, stockProperties, stockQuantities, storeFragmentProgressBar);
         storeRecycler.setAdapter(storeRecyclerAdapter);
-
-
-
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference stockRef = database.getReference("stock");
@@ -66,42 +70,62 @@ public class StoreFragment extends Fragment {
                 stockList.clear();
                 stockProperties.clear();
 
+                storeFragmentProgressBar.setVisibility(View.VISIBLE);
+                storeFragmentProgressBar.animate();
+
                 for(DataSnapshot categorySnapShot : dataSnapshot.getChildren()){
 
                     for (DataSnapshot typeSnapShot : categorySnapShot.getChildren()){
                         ArrayList<String> type = new ArrayList<>();
 
-                        String name = typeSnapShot.getKey();
-                        String price = typeSnapShot.child("price").getValue().toString();
-                        String id = typeSnapShot.child("id").getValue().toString();
+                        boolean error = false;
 
-                        type.add(id);
-                        type.add(formatName(name));
-                        type.add(price);
+                        try{
+                            String id = typeSnapShot.child("id").getValue().toString();
+                            String name = typeSnapShot.getKey();
+                            String price = typeSnapShot.child("price").getValue().toString();
 
-                        stockList.add(type);
+                            type.add(id);
+                            type.add(formatName(name));
+                            type.add(price);
 
-                        for (DataSnapshot eachColour : typeSnapShot.getChildren()){
-                            ArrayList<String> specifics = new ArrayList<>();
-                            if (eachColour.child("colourID").exists()) {
-
-                                String productID = eachColour.child("productID").getValue().toString();
-                                String colourID = eachColour.child("colourID").getValue().toString();
-                                String colour = eachColour.getKey();
-//                                Log.i("OHERE", "Name: " + name + ", Colour: " + colour);
-                                String front_path = eachColour.child("image_front").getValue(String.class);
-//                            String back_path = typeSnapShot.child("image_back").getValue().toString();
-
-                                specifics.add(productID);
-                                specifics.add(colourID);
-//                                Log.i("OHERE", "onDataChange: " + colourID);
-                                specifics.add(formatName(colour));
-                                specifics.add(front_path);
-//                            specifics.add(back_path);
-
-                                stockProperties.add(specifics);
-                            }
+                        }catch (NullPointerException e){
+                            error = true;
                         }
+
+                        if (!error){
+                            stockList.add(type);
+
+                            for (DataSnapshot eachColour : typeSnapShot.getChildren()){
+                                ArrayList<String> specifics = new ArrayList<>();
+                                if (eachColour.child("colourID").exists()) {
+
+                                    try{
+                                        String productID = eachColour.child("productID").getValue().toString();
+                                        String colourID = eachColour.child("colourID").getValue().toString();
+                                        String colour = eachColour.getKey();
+                                        String front_path = eachColour.child("image_front").getValue(String.class);
+//                                      String back_path = typeSnapShot.child("image_back").getValue().toString();
+
+                                        specifics.add(productID);
+                                        specifics.add(colourID);
+                                        specifics.add(formatName(colour));
+                                        specifics.add(front_path);
+//                                      specifics.add(back_path);
+
+                                        stockProperties.add(specifics);
+
+                                    }catch (NullPointerException e){
+
+                                        specifics.add("ERROR");
+                                        stockProperties.add(specifics);
+                                    }
+
+                                }
+                            }
+                        //end of error check
+                        }
+
                     }
                 }
                 storeRecyclerAdapter.notifyDataSetChanged();
@@ -120,13 +144,21 @@ public class StoreFragment extends Fragment {
                 stockQuantities.clear();
 
                 for(DataSnapshot productIDSnapshot : dataSnapshot.getChildren()) {
-                    String productID = productIDSnapshot.getKey();
-                    String quantity = productIDSnapshot.getValue().toString();
+                    storeFragmentProgressBar.setVisibility(View.VISIBLE);
+                    storeFragmentProgressBar.animate();
 
-                    ArrayList<String> productQuan = new ArrayList<>();
-                    productQuan.add(productID);
-                    productQuan.add(quantity);
-                    stockQuantities.add(productQuan);
+                    try {
+                        String productID = productIDSnapshot.getKey();
+                        String quantity = productIDSnapshot.getValue().toString();
+
+                        ArrayList<String> productQuan = new ArrayList<>();
+                        productQuan.add(productID);
+                        productQuan.add(quantity);
+                        stockQuantities.add(productQuan);
+                    }catch (NullPointerException e){
+
+                    }
+
                 }
                 storeRecyclerAdapter.notifyDataSetChanged();
             }

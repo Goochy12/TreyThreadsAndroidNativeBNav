@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -63,6 +64,8 @@ public class cartRecAdpt extends RecyclerView.Adapter<cartRecAdpt.cartViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull final cartViewHolder holder, final int position){
+        holder.cartCardProgressBar.setVisibility(View.VISIBLE);
+        holder.cartCardProgressBar.animate();
 
         holder.itemText.setText(cartItems.get(position).getItemName());
         holder.itemSize.setText(cartItems.get(position).getItemSize());
@@ -189,6 +192,7 @@ public class cartRecAdpt extends RecyclerView.Adapter<cartRecAdpt.cartViewHolder
         public TextView itemColour;
         public ImageView removeButton;
         public Spinner itemQuantity;
+        public ProgressBar cartCardProgressBar;
 
 
         public cartViewHolder(View itemView){
@@ -201,6 +205,7 @@ public class cartRecAdpt extends RecyclerView.Adapter<cartRecAdpt.cartViewHolder
             itemImage = (ImageView) itemView.findViewById(R.id.cartCardImage);
             itemQuantity = (Spinner) itemView.findViewById(R.id.cartCardSpinner);
             removeButton = (ImageView) itemView.findViewById(R.id.removeFromCartButton);
+            cartCardProgressBar = (ProgressBar) itemView.findViewById(R.id.cartCardProgressBar);
         }
     }
 

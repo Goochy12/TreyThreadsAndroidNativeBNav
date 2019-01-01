@@ -6,9 +6,11 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.PointerIcon;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -23,10 +25,13 @@ public class homeRecAdpt extends RecyclerView.Adapter<homeRecAdpt.HomeViewHolder
 
     private Context context;
 
+    private ProgressBar homeProgressBar;
+
     //constructor
-    public homeRecAdpt(ArrayList<ArrayList<String>> homeData, Context context){
+    public homeRecAdpt(ArrayList<ArrayList<String>> homeData, Context context, ProgressBar homeProgressBar){
         this.homeData = homeData;
         this.context = context;
+        this.homeProgressBar = homeProgressBar;
     }
 
     //create views
@@ -38,11 +43,16 @@ public class homeRecAdpt extends RecyclerView.Adapter<homeRecAdpt.HomeViewHolder
 
         HomeViewHolder hVH = new HomeViewHolder(v);
 
+        homeProgressBar.setVisibility(View.GONE);
+
         return hVH;
     }
 
     @Override
     public void onBindViewHolder(@NonNull HomeViewHolder holder, int position){
+        holder.homeCardProgressBar.setVisibility(View.VISIBLE);
+        holder.homeCardProgressBar.animate();
+
         String title = homeData.get(position).get(0);
         String message = homeData.get(position).get(1);
         final String link = homeData.get(position).get(2);
@@ -58,6 +68,7 @@ public class homeRecAdpt extends RecyclerView.Adapter<homeRecAdpt.HomeViewHolder
         if(image != null && !image.isEmpty()){
             Picasso.get().load(image).into(holder.itemImage);
         }
+//        holder.homeCardProgressBar.setVisibility(View.GONE);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,6 +93,7 @@ public class homeRecAdpt extends RecyclerView.Adapter<homeRecAdpt.HomeViewHolder
         public ImageView itemImage;
         public TextView itemTitle;
         public TextView itemMessage;
+        public ProgressBar homeCardProgressBar;
 
         public HomeViewHolder(View itemView){
             super(itemView);
@@ -89,6 +101,7 @@ public class homeRecAdpt extends RecyclerView.Adapter<homeRecAdpt.HomeViewHolder
             itemTitle = (TextView) itemView.findViewById(R.id.homeCardHeading);
             itemMessage = (TextView) itemView.findViewById(R.id.homeCardInfo);
             itemImage = (ImageView) itemView.findViewById(R.id.homeCardImage);
+            homeCardProgressBar = (ProgressBar) itemView.findViewById(R.id.homeCardProgressBar);
         }
     }
 

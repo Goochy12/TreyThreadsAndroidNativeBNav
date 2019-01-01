@@ -5,9 +5,11 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -26,6 +28,8 @@ public class HomeFragment extends Fragment {
     private RecyclerView homeRecycler;
     private RecyclerView.Adapter homeRecyclerAdapter;
     private RecyclerView.LayoutManager homeRecyclerLayoutManager;
+
+    private ProgressBar homeProgressBar;
 
     private ArrayList<ArrayList<String>> homeItems = new ArrayList<>();
 
@@ -46,6 +50,10 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstaceState){
         super.onViewCreated(view, savedInstaceState);
 
+        homeProgressBar = (ProgressBar) view.findViewById(R.id.homeFragmentProgressBar);
+        homeProgressBar.setVisibility(View.VISIBLE);
+        homeProgressBar.animate();
+
         //get the recycler
         homeRecycler = (RecyclerView) view.findViewById(R.id.homeRecyclerView);
         //homeRecycler.setHasFixedSize(true);
@@ -55,7 +63,7 @@ public class HomeFragment extends Fragment {
         homeRecycler.setLayoutManager(homeRecyclerLayoutManager);
 
 //specify adapter
-        homeRecyclerAdapter = new homeRecAdpt(homeItems, getActivity());
+        homeRecyclerAdapter = new homeRecAdpt(homeItems, getActivity(), homeProgressBar);
         homeRecycler.setAdapter(homeRecyclerAdapter);
 
 
@@ -67,6 +75,8 @@ public class HomeFragment extends Fragment {
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                homeProgressBar.setVisibility(View.VISIBLE);
+                homeProgressBar.animate();
                 homeItems.clear();
 
                 for(DataSnapshot categorySnapShot : dataSnapshot.getChildren()){
@@ -74,21 +84,67 @@ public class HomeFragment extends Fragment {
                     for (DataSnapshot itemSnapShot : categorySnapShot.getChildren()){
                         ArrayList<String> item = new ArrayList<>();
 
-                        String title = itemSnapShot.child("title").getValue().toString();
-                        String message = itemSnapShot.child("message").getValue().toString();
-                        String link = itemSnapShot.child("link").getValue().toString();
-                        String image = itemSnapShot.child("image").getValue().toString();
-                        String internal = itemSnapShot.child("internal").getValue().toString();
-                        String clickable = itemSnapShot.child("clickable").getValue().toString();
+                        boolean error = false;
 
-                        item.add(title);
-                        item.add(message);
-                        item.add(link);
-                        item.add(image);
-                        item.add(internal);
-                        item.add(clickable);
+                        try {
+                            String title = itemSnapShot.child("title").getValue().toString();
+                            item.add(title);
+                        }catch (NullPointerException e){
+                            error = true;
+                        }
 
-                        homeItems.add(item);
+                        if (!error){
+                            try {
+                                String message = itemSnapShot.child("message").getValue().toString();
+                                item.add(message);
+                            }catch (NullPointerException e){
+                                item.add("");
+                            }
+                            try {
+                                String link = itemSnapShot.child("link").getValue().toString();
+                                item.add(link);
+
+                            }catch (NullPointerException e){
+                                item.add("null");
+                            }
+                            try {
+                                String image = itemSnapShot.child("image").getValue().toString();
+                                item.add(image);
+                            }catch (NullPointerException e){
+                                item.add("null");
+                            }
+                            try {
+                                String internal = itemSnapShot.child("internal").getValue().toString();
+                                item.add(internal);
+                            }catch (NullPointerException e){
+                                item.add("1");
+                            }
+                            try {
+                                String clickable = itemSnapShot.child("clickable").getValue().toString();
+                                item.add(clickable);
+                            }catch (NullPointerException e){
+                                item.add("0");
+                            }
+
+                            homeItems.add(item);
+
+                        }
+
+//
+//                        String title = itemSnapShot.child("title").getValue().toString();
+//                        String message = itemSnapShot.child("message").getValue().toString();
+//                        String link = itemSnapShot.child("link").getValue().toString();
+//                        String image = itemSnapShot.child("image").getValue().toString();
+//                        String internal = itemSnapShot.child("internal").getValue().toString();
+//                        String clickable = itemSnapShot.child("clickable").getValue().toString();
+//
+//                        item.add(title);
+//                        item.add(message);
+//                        item.add(link);
+//                        item.add(image);
+//                        item.add(internal);
+//                        item.add(clickable);
+
                     }
                 }
                 homeRecyclerAdapter.notifyDataSetChanged();

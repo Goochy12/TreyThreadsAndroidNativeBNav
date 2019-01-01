@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -35,18 +36,21 @@ public class storeRecAdpt extends RecyclerView.Adapter<storeRecAdpt.storeViewHol
     private ArrayList<ArrayList<String>> stockProperties = new ArrayList<>();
     private ArrayList<ArrayList<String>> stockQuantities = new ArrayList<>();
     private int colourSpinnerPos;
+    private ProgressBar storeFragmentProgressBar;
 
 
     private CartViewModel cartViewModel;
 
     //constructor
-    public storeRecAdpt(Context context, ArrayList<ArrayList<String>> stockList, ArrayList<ArrayList<String>> stockProperties, ArrayList<ArrayList<String>> stockQuantities){
+    public storeRecAdpt(Context context, ArrayList<ArrayList<String>> stockList, ArrayList<ArrayList<String>> stockProperties,
+                        ArrayList<ArrayList<String>> stockQuantities, ProgressBar storeFragmentProgressBar){
 
         this.context = context;
 
         this.stockList = stockList;
         this.stockProperties = stockProperties;
         this.stockQuantities = stockQuantities;
+        this.storeFragmentProgressBar = storeFragmentProgressBar;
     }
 
     //create views
@@ -57,12 +61,15 @@ public class storeRecAdpt extends RecyclerView.Adapter<storeRecAdpt.storeViewHol
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.store_cards,parent,false);
 
         storeViewHolder hVH = new storeViewHolder(v);
+        storeFragmentProgressBar.setVisibility(View.GONE);
 
         return hVH;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final storeViewHolder holder, final int position){
+    public void onBindViewHolder(@NonNull final storeViewHolder holder, final int position) {
+        holder.storeCardProgressBar.setVisibility(View.VISIBLE);
+        holder.storeCardProgressBar.animate();
 
         String name;
         String price;
@@ -72,23 +79,33 @@ public class storeRecAdpt extends RecyclerView.Adapter<storeRecAdpt.storeViewHol
         final ArrayList<String> productIDList = new ArrayList<>();
 
         id = stockList.get(position).get(0);
-        name = stockList.get(position).get(1);
-        price = stockList.get(position).get(2);
+        if (id.equals("ERROR")) {
+            holder.itemText.setText("Error");
+            holder.colourList.setEnabled(false);
+            holder.itemPrice.setText("Error");
+            holder.sizeList.setEnabled(false);
+            holder.addToCartButton.setEnabled(false);
+            holder.itemImage.setBackgroundResource(R.drawable.treysplash);
+            holder.storeCardProgressBar.setVisibility(View.GONE);
+        } else {
 
 
-
-        ArrayList<String> colourList = new ArrayList<>();
-
-        final ArrayList<ArrayList<Integer>> quantityList = new ArrayList<>();
+            name = stockList.get(position).get(1);
+            price = stockList.get(position).get(2);
 
 
-        //get colours
-        for(int i = 0; i < stockProperties.size(); i++){
-            if (stockProperties.get(i).get(1).equals(id)){
-                colourList.add(stockProperties.get(i).get(2));
+            ArrayList<String> colourList = new ArrayList<>();
+
+            final ArrayList<ArrayList<Integer>> quantityList = new ArrayList<>();
+
+
+            //get colours
+            for (int i = 0; i < stockProperties.size(); i++) {
+                if (stockProperties.get(i).get(1).equals(id)) {
+                    colourList.add(stockProperties.get(i).get(2));
 //        Log.i("OHERE", "onBindViewHolder: " + name + ", " + stockProperties.get(i).get(1) + ", " + stockProperties.get(i).get(3));
 
-                //get quantities of sizes
+                    //get quantities of sizes
 //                ArrayList<Integer> tempSizes = new ArrayList<>();
 //                tempSizes.add(Integer.parseInt(stockProperties.get(i).get(3)));
 //                tempSizes.add(Integer.parseInt(stockProperties.get(i).get(4)));
@@ -101,156 +118,160 @@ public class storeRecAdpt extends RecyclerView.Adapter<storeRecAdpt.storeViewHol
 //                Log.i("OHERE", "XL: " + tempSizes.get(3));
 //                Log.i("OHERE", "XL: ");
 
-                path.add(stockProperties.get(i).get(3));
-                productIDList.add(stockProperties.get(i).get(0));
+                    path.add(stockProperties.get(i).get(3));
+                    productIDList.add(stockProperties.get(i).get(0));
 
+                }
             }
-        }
 
-        String s;
-        String m;
-        String l;
-        String xl;
-        ArrayList<Integer> tempSizes = new ArrayList<>();
-        ArrayList<String> finished = new ArrayList<>();
-        for (int i = 0; i < productIDList.size(); i++){
-            int j = 0;
+            String s;
+            String m;
+            String l;
+            String xl;
+            ArrayList<Integer> tempSizes = new ArrayList<>();
+            ArrayList<String> finished = new ArrayList<>();
+            for (int i = 0; i < productIDList.size(); i++) {
+                int j = 0;
 
-            tempSizes = new ArrayList<>();
-            tempSizes.add(0);
-            tempSizes.add(0);
-            tempSizes.add(0);
-            tempSizes.add(0);
-            finished = new ArrayList<>();
+                tempSizes = new ArrayList<>();
+                tempSizes.add(0);
+                tempSizes.add(0);
+                tempSizes.add(0);
+                tempSizes.add(0);
+                finished = new ArrayList<>();
 
-            while (finished.size() < 4 && j < stockQuantities.size()){
-                s = productIDList.get(i) + "-s";
-                m = productIDList.get(i) + "-m";
-                l = productIDList.get(i) + "-l";
-                xl = productIDList.get(i) + "-xl";
+                while (finished.size() < 4 && j < stockQuantities.size()) {
+                    s = productIDList.get(i) + "-s";
+                    m = productIDList.get(i) + "-m";
+                    l = productIDList.get(i) + "-l";
+                    xl = productIDList.get(i) + "-xl";
 
 
-                if (s.equals(stockQuantities.get(j).get(0))){
-                    tempSizes.set(0,Integer.parseInt(stockQuantities.get(j).get(1)));
-                    finished.add("s");
+                    if (s.equals(stockQuantities.get(j).get(0))) {
+                        tempSizes.set(0, Integer.parseInt(stockQuantities.get(j).get(1)));
+                        finished.add("s");
+                    }
+                    if (m.equals(stockQuantities.get(j).get(0))) {
+                        tempSizes.set(1, Integer.parseInt(stockQuantities.get(j).get(1)));
+                        finished.add("m");
+                    }
+                    if (l.equals(stockQuantities.get(j).get(0))) {
+                        tempSizes.set(2, Integer.parseInt(stockQuantities.get(j).get(1)));
+                        finished.add("l");
+                    }
+                    if (xl.equals(stockQuantities.get(j).get(0))) {
+                        tempSizes.set(3, Integer.parseInt(stockQuantities.get(j).get(1)));
+                        finished.add("xl");
+                    }
+                    j++;
                 }
-                if (m.equals(stockQuantities.get(j).get(0))){
-                    tempSizes.set(1,Integer.parseInt(stockQuantities.get(j).get(1)));
-                    finished.add("m");
-                }
-                if (l.equals(stockQuantities.get(j).get(0))){
-                    tempSizes.set(2,Integer.parseInt(stockQuantities.get(j).get(1)));
-                    finished.add("l");
-                }
-                if (xl.equals(stockQuantities.get(j).get(0))){
-                    tempSizes.set(3,Integer.parseInt(stockQuantities.get(j).get(1)));
-                    finished.add("xl");
-                }
-                j++;
-            }
 //            Log.i("OHERE", "S: " + tempSizes.get(0));
 //            Log.i("OHERE", "M: " + tempSizes.get(1));
 //            Log.i("OHERE", "L: " + tempSizes.get(2));
 //            Log.i("OHERE", "XL: " + tempSizes.get(3));
-            quantityList.add(tempSizes);
-        }
+                quantityList.add(tempSizes);
+            }
 
-        //GET SIZES AVAILABLE
-        ArrayList<String> sizeList = getSizeList(quantityList.get(0));
-        if (sizeList.size() == 0){
-            holder.addToCartButton.setEnabled(false);
-            holder.sizeList.setEnabled(false);
-        }
+            //GET SIZES AVAILABLE
+            ArrayList<String> sizeList = new ArrayList<>();
+            if (quantityList.size() > 0){
+                sizeList = getSizeList(quantityList.get(0));
+            }
+            if (sizeList.size() == 0) {
+                holder.addToCartButton.setEnabled(false);
+                holder.sizeList.setEnabled(false);
+            }
 
 
 //        path = stockList.get(position).get(1);
 
-        //SET NAME
-        holder.itemText.setText(name);
+            //SET NAME
+            holder.itemText.setText(name);
 
 
-        //SET PRICE
-        holder.itemPrice.setText("$"+price);
+            //SET PRICE
+            holder.itemPrice.setText("$" + price);
 
-        //SET SIZES
+            //SET SIZES
 
-        final ArrayAdapter<String> sizeSpinnerAdapter = new ArrayAdapter<>(context,android.R.layout.simple_spinner_item,sizeList);
-        sizeSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            final ArrayAdapter<String> sizeSpinnerAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, sizeList);
+            sizeSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        holder.sizeList.setAdapter(sizeSpinnerAdapter);
+            holder.sizeList.setAdapter(sizeSpinnerAdapter);
 
 
-        //SET COLOURS
-        final ArrayAdapter<String> colourSpinnerAdapter = new ArrayAdapter<>(context,android.R.layout.simple_spinner_item,colourList);
-        colourSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            //SET COLOURS
+            final ArrayAdapter<String> colourSpinnerAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, colourList);
+            colourSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        holder.colourList.setAdapter(colourSpinnerAdapter);
-        //colour listener
-        holder.colourList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int spinnerPosition, long id) {
-                colourSpinnerPos = spinnerPosition;
+            holder.colourList.setAdapter(colourSpinnerAdapter);
+            //colour listener
+            holder.colourList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int spinnerPosition, long id) {
+                    colourSpinnerPos = spinnerPosition;
 
-                //set image
-                setImage(path.get(spinnerPosition),holder);
+                    //set image
+                    setImage(path.get(spinnerPosition), holder);
+//                    holder.storeCardProgressBar.setVisibility(View.GONE);
 
-                //updates sizes
-                ArrayList<String> updatedSizeList = getSizeList(quantityList.get(spinnerPosition));
-                if (updatedSizeList.size() == 0){
-                    holder.addToCartButton.setEnabled(false);
-                    holder.sizeList.setEnabled(false);
-                }else{
-                    holder.addToCartButton.setEnabled(true);
-                    holder.sizeList.setEnabled(true);
+                    //updates sizes
+                    ArrayList<String> updatedSizeList = getSizeList(quantityList.get(spinnerPosition));
+                    if (updatedSizeList.size() == 0) {
+                        holder.addToCartButton.setEnabled(false);
+                        holder.sizeList.setEnabled(false);
+                    } else {
+                        holder.addToCartButton.setEnabled(true);
+                        holder.sizeList.setEnabled(true);
+                    }
+
+                    setSpinnerAdapter(holder, updatedSizeList);
                 }
 
-                setSpinnerAdapter(holder,updatedSizeList);
-            }
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+                }
+            });
 
-            }
-        });
-
-        //SET IMAGE
-        //productImagePath[position] != null && !productImagePath[position].isEmpty()
+            //SET IMAGE
+            //productImagePath[position] != null && !productImagePath[position].isEmpty()
 //        if(stockProperties.get(position).get(6) != null && !stockProperties.get(position).get(6).isEmpty()){
 //            Picasso.get().load(path.get()).into(holder.itemImage);
 //        }
 
 
-        //Add to cart button
-        cartViewModel = ViewModelProviders.of((FragmentActivity) context).get(CartViewModel.class);
-        holder.addToCartButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CartItem cartItem;
-                //CartItem cartItem = cartViewModel.getSameItem("StockName","M");
+            //Add to cart button
+            cartViewModel = ViewModelProviders.of((FragmentActivity) context).get(CartViewModel.class);
+            holder.addToCartButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CartItem cartItem;
+                    //CartItem cartItem = cartViewModel.getSameItem("StockName","M");
 //                if (cartItem != null){
 //                    //cartViewModel
 //                }
 //                else {
-                String name;
-                String price;
-                String pa;
-                String colour;
-                String productID;
+                    String name;
+                    String price;
+                    String pa;
+                    String colour;
+                    String productID;
 
-                name = stockList.get(position).get(1);
-                pa = path.get(colourSpinnerPos);
-                price = stockList.get(position).get(2);
-                colour = getSelectedColour(holder);
-                productID = productIDList.get(holder.colourList.getSelectedItemPosition()) + "-" + getSelectedSize(holder).toLowerCase();
+                    name = stockList.get(position).get(1);
+                    pa = path.get(colourSpinnerPos);
+                    price = stockList.get(position).get(2);
+                    colour = getSelectedColour(holder);
+                    productID = productIDList.get(holder.colourList.getSelectedItemPosition()) + "-" + getSelectedSize(holder).toLowerCase();
 
-                cartItem = new CartItem(name,getSelectedSize(holder),price,pa,1, colour, productID);
+                    cartItem = new CartItem(name, getSelectedSize(holder), price, pa, 1, colour, productID);
 
-                List<CartItem> sameItems = cartViewModel.getSameItem(productID);
-                if (sameItems.size() <= 0){
-                    cartViewModel.insert(cartItem);
-                }else{
-                    cartViewModel.updateQuantity(sameItems.get(0),sameItems.get(0).getQuantity() + 1);
-                }
+                    List<CartItem> sameItems = cartViewModel.getSameItem(productID);
+                    if (sameItems.size() <= 0) {
+                        cartViewModel.insert(cartItem);
+                    } else {
+                        cartViewModel.updateQuantity(sameItems.get(0), sameItems.get(0).getQuantity() + 1);
+                    }
 
 //                Log.i("OHERE", "onClick: ");
 //                    List<CartItem> sameItem = cartViewModel.getSameItem(cartItem);
@@ -263,8 +284,8 @@ public class storeRecAdpt extends RecyclerView.Adapter<storeRecAdpt.storeViewHol
 //                    cartViewModel.updateQuantity(sameItem.get(0), sameItem.get(0).getQuantity() + 1);
 //                    }
 ////                }
-            }
-        });
+                }
+            });
 //
 //        String checkID = productIDList.get(holder.colourList.getSelectedItemPosition()) + "-" + getSelectedSize(holder).toLowerCase();
 //        List<CartItem> testItems = cartViewModel.getSameItem(checkID);
@@ -277,6 +298,7 @@ public class storeRecAdpt extends RecyclerView.Adapter<storeRecAdpt.storeViewHol
 //            holder.addToCartButton.setEnabled(true);
 //            holder.sizeList.setEnabled(true);
 //        }
+        }
     }
 
     public static Drawable LoadImageFromWeb(String url){
@@ -304,6 +326,7 @@ public class storeRecAdpt extends RecyclerView.Adapter<storeRecAdpt.storeViewHol
         public Spinner sizeList;
         public Spinner colourList;
         public Button addToCartButton;
+        public ProgressBar storeCardProgressBar;
 
 
         public storeViewHolder(View itemView){
@@ -315,6 +338,7 @@ public class storeRecAdpt extends RecyclerView.Adapter<storeRecAdpt.storeViewHol
             sizeList = (Spinner) itemView.findViewById(R.id.storeSizeSpinner);
             colourList = (Spinner) itemView.findViewById(R.id.storeColourSpinner);
             addToCartButton = (Button) itemView.findViewById(R.id.addToCartButton);
+            storeCardProgressBar = (ProgressBar) itemView.findViewById(R.id.storeCardProgressBar);
         }
     }
 
