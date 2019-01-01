@@ -37,4 +37,8 @@ public class CartViewModel extends AndroidViewModel {
     public void updateQuantity(CartItem cartItem, int quantity){
         cartRepository.updateQuantity(cartItem, quantity);
     }
+
+    public int getCount(){
+        return cartRepository.getCount();
+    }
 }

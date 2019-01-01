@@ -29,6 +29,10 @@ public class CartRepository {
         return mCartItemDao.getSameItem(productID);
     }
 
+    public int getCount(){
+        return mCartItemDao.getCount();
+    }
+
     public void updateQuantity(CartItem cartItem, int quantity){
 //        mCartItemDao.updateQuantity(cartItem.getItemID(),quantity);
         new updateQuantityAsyncTask(mCartItemDao,quantity).execute(cartItem);

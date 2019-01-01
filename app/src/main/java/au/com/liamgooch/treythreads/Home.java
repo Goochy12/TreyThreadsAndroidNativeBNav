@@ -1,20 +1,37 @@
 package au.com.liamgooch.treythreads;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
+
+import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
+
+import com.google.android.material.bottomnavigation.BottomNavigationItemView;
+import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.braintreepayments.api.BraintreeFragment;
 import com.braintreepayments.api.exceptions.InvalidArgumentException;
 
+import java.util.List;
+
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import au.com.liamgooch.treythreads.cart_data.CartItem;
 import au.com.liamgooch.treythreads.fragments.AboutFragment;
 import au.com.liamgooch.treythreads.fragments.CartFragment;
 import au.com.liamgooch.treythreads.fragments.AccountFragment;
@@ -43,6 +60,9 @@ public class Home extends AppCompatActivity {
     private Fragment aboutFrag = new AboutFragment();
 //    private Fragment settingsFrag = new SettingsFragment();
     private Fragment active;
+
+    private CartViewModel cartViewModel;
+    private Context context;
 
 
     private static final String TAG = "OHERE";
@@ -182,7 +202,36 @@ public class Home extends AppCompatActivity {
 //
 //        }
 
+        context = this;
+        cartViewModel = ViewModelProviders.of((FragmentActivity) this).get(CartViewModel.class);
+        cartViewModel.getAllItems().observe(this, new Observer<List<CartItem>>() {
+            @Override
+            public void onChanged(List<CartItem> cartItems) {
+                int cartCount = cartItems.size();
+                if (cartCount > 0){
+                    showBadge(context,navigation,R.id.navigation_cart,String.valueOf(cartCount));
+                }else {
+                    removeBadge(navigation,R.id.navigation_cart);
+                }
+            }
+        });
+    }
 
+    public static void showBadge(Context context, BottomNavigationView
+            bottomNavigationView, @IdRes int itemId, String value) {
+        BottomNavigationItemView itemView = bottomNavigationView.findViewById(itemId);
+        View badge = LayoutInflater.from(context).inflate(R.layout.notification_badge, bottomNavigationView, false);
+
+        TextView text = badge.findViewById(R.id.badge_text_view);
+        text.setText(value);
+        itemView.addView(badge);
+    }
+
+    public static void removeBadge(BottomNavigationView bottomNavigationView, @IdRes int itemId) {
+        BottomNavigationItemView itemView = bottomNavigationView.findViewById(itemId);
+        if (itemView.getChildCount() == 3) {
+            itemView.removeViewAt(2);
+        }
     }
 
     @Override

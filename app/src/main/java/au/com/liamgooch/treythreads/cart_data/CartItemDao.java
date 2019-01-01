@@ -31,4 +31,7 @@ public interface CartItemDao {
 //    @Update(onConflict = OnConflictStrategy.REPLACE)
     @Query("UPDATE CART_TABLE SET quantity = :quan WHERE itemID = :id ")
     void updateQuantity(int id, int quan);
+
+    @Query("SELECT COUNT(*) FROM cart_table")
+    int getCount();
 }
