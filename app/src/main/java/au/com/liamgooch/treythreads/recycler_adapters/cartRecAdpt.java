@@ -6,6 +6,8 @@ import android.graphics.drawable.Drawable;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,97 +69,100 @@ public class cartRecAdpt extends RecyclerView.Adapter<cartRecAdpt.cartViewHolder
         holder.cartCardProgressBar.setVisibility(View.VISIBLE);
         holder.cartCardProgressBar.animate();
 
-        holder.itemText.setText(cartItems.get(position).getItemName());
-        holder.itemSize.setText(cartItems.get(position).getItemSize());
-        holder.itemColour.setText(cartItems.get(position).getColour());
+        if (stockQuantities.size() > 0) {
 
-        //quantity spinner
-        final ArrayList<String> quantity = new ArrayList<>();
+            holder.itemText.setText(cartItems.get(position).getItemName());
+            holder.itemSize.setText(cartItems.get(position).getItemSize());
+            holder.itemColour.setText(cartItems.get(position).getColour());
 
-        //find product max quantity
-        ArrayList<String> product = new ArrayList<>();
-        int p = 0;
-        while (product.isEmpty()){
-            if (cartItems.get(position).getProductID().equals(stockQuantities.get(p).get(0))){
-                product.add(stockQuantities.get(p).get(0));
-                product.add(stockQuantities.get(p).get(1));
-            }else{
-                p++;
-            }
-        }
+            //quantity spinner
+            final ArrayList<String> quantity = new ArrayList<>();
 
-        //add max quantity
-        int maxQuan = 0;
-//        Log.i("OHERE", "onBindViewHolder: " + cartItems.get(position).getMaxQuantity());
-        while (maxQuan < 5 && maxQuan < Integer.parseInt(product.get(1))){
-            quantity.add(Integer.toString(maxQuan+1));
-            maxQuan++;
-        }
-
-
-        final ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(context,android.R.layout.simple_spinner_item,quantity);
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        holder.itemQuantity.setAdapter(spinnerAdapter);
-
-        Toast notifyQuantityChanged = Toast.makeText(context, "Quantity updated...", Toast.LENGTH_SHORT);
-        //set selected quantity
-        int selection = cartItems.get(position).getQuantity() - 1;
-        if (maxQuan == 0){
-            cartViewModel.deleteItem(cartItems.get(position));
-            notifyQuantityChanged.show();
-        }else if (selection >= maxQuan){
-            selection = maxQuan - 1;
-
-            //NOTIFY QUANTITY CHANGED
-            cartViewModel.updateQuantity(cartItems.get(position), selection + 1);
-            notifyQuantityChanged.show();
-        }
-        holder.itemQuantity.setSelection(selection);
-
-        final int[] firstSelection = new int[1];
-        final int[] secondSelection = new int[1];
-
-
-        firstSelection[0] = holder.itemQuantity.getSelectedItemPosition();
-
-        holder.itemQuantity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int spinnerPosition, long id) {
-                secondSelection[0] = holder.itemQuantity.getSelectedItemPosition();
-
-                if (firstSelection[0] != secondSelection[0]){
-                    cartViewModel.updateQuantity(cartItems.get(position),holder.itemQuantity.getSelectedItemPosition() + 1);
-                    firstSelection[0] = secondSelection[0];
-
-                    setPrice(holder, position);
+            //find product max quantity
+            ArrayList<String> product = new ArrayList<>();
+            int p = 0;
+            while (product.isEmpty()) {
+                if (cartItems.get(position).getProductID().equals(stockQuantities.get(p).get(0))) {
+                    product.add(stockQuantities.get(p).get(0));
+                    product.add(stockQuantities.get(p).get(1));
+                } else {
+                    p++;
                 }
+            }
+
+            //add max quantity
+            int maxQuan = 0;
+//        Log.i("OHERE", "onBindViewHolder: " + cartItems.get(position).getMaxQuantity());
+            while (maxQuan < 5 && maxQuan < Integer.parseInt(product.get(1))) {
+                quantity.add(Integer.toString(maxQuan + 1));
+                maxQuan++;
+            }
+
+
+            final ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, quantity);
+            spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+            holder.itemQuantity.setAdapter(spinnerAdapter);
+
+            Toast notifyQuantityChanged = Toast.makeText(context, "Quantity updated...", Toast.LENGTH_SHORT);
+            //set selected quantity
+            int selection = cartItems.get(position).getQuantity() - 1;
+            if (maxQuan == 0) {
+                cartViewModel.deleteItem(cartItems.get(position));
+                notifyQuantityChanged.show();
+            } else if (selection >= maxQuan) {
+                selection = maxQuan - 1;
+
+                //NOTIFY QUANTITY CHANGED
+                cartViewModel.updateQuantity(cartItems.get(position), selection + 1);
+                notifyQuantityChanged.show();
+            }
+            holder.itemQuantity.setSelection(selection);
+
+            final int[] firstSelection = new int[1];
+            final int[] secondSelection = new int[1];
+
+
+            firstSelection[0] = holder.itemQuantity.getSelectedItemPosition();
+
+            holder.itemQuantity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int spinnerPosition, long id) {
+                    secondSelection[0] = holder.itemQuantity.getSelectedItemPosition();
+
+                    if (firstSelection[0] != secondSelection[0]) {
+                        cartViewModel.updateQuantity(cartItems.get(position), holder.itemQuantity.getSelectedItemPosition() + 1);
+                        firstSelection[0] = secondSelection[0];
+
+                        setPrice(holder, position);
+                    }
 //
 
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+
+            setPrice(holder, position);
+
+            //image
+            if (cartItems.get(position).getItemPath() != null && !cartItems.get(position).getItemPath().isEmpty()) {
+                Picasso.get().load(cartItems.get(position).getItemPath()).into(holder.itemImage);
             }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+            holder.removeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    cartViewModel.deleteItem(cartItems.get(position));
+                    notifyDataSetChanged();
 
-            }
-        });
 
-        setPrice(holder,position);
-
-        //image
-        if(cartItems.get(position).getItemPath() != null && !cartItems.get(position).getItemPath().isEmpty()){
-            Picasso.get().load(cartItems.get(position).getItemPath()).into(holder.itemImage);
+                }
+            });
         }
-
-        holder.removeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cartViewModel.deleteItem(cartItems.get(position));
-                notifyDataSetChanged();
-
-
-            }
-        });
     }
 
     public static Drawable LoadImageFromWeb(String url){

@@ -8,6 +8,8 @@ import android.os.Bundle;
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 
+import com.braintreepayments.api.PayPal;
+import com.braintreepayments.api.models.PayPalRequest;
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -22,6 +24,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.braintreepayments.api.BraintreeFragment;
@@ -66,8 +69,145 @@ public class Home extends AppCompatActivity {
 
 
     private static final String TAG = "OHERE";
-    private BraintreeFragment mBraintreeFragment;
-    private static final String BRAINTREE_ACCESS_TOKEN = "access_token$sandbox$rrrnpdfp5mpm83zq$c4626caef58f28a29f18fdece41febc7";
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.TreySplashTheme);
+
+        super.onCreate(savedInstanceState);
+
+        setTheme(R.style.TreyThreadsTheme);
+        setContentView(R.layout.activity_home);
+
+
+
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+//        getSupportActionBar().setTitle("");
+
+
+        //fragment stuff
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//        HomeFragment homeFragment = new HomeFragment();
+//        fragmentTransaction.add(R.id.fragmentLayout,homeFragment);
+//        fragmentTransaction.commit();
+
+        navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        //set a null tint on the selected item
+        navigation.setItemIconTintList(null);
+
+        //get the items
+        homeItem = navigation.getMenu().getItem(0);
+        storeItem = navigation.getMenu().getItem(1);
+        cartItem = navigation.getMenu().getItem(2);
+        accountItem = navigation.getMenu().getItem(3);
+
+
+        //HomeFragment homeFragment = HomeFragment.newInstance("param1","param2");
+
+//        if (savedInstanceState == null) {
+            fragMan = getSupportFragmentManager();
+            fragMan.beginTransaction().add(R.id.fragmentLayout, homeFrag).commit();
+            active = homeFrag;
+
+            fragMan.beginTransaction().add(R.id.fragmentLayout, storeFrag).hide(storeFrag).commit();
+            fragMan.beginTransaction().add(R.id.fragmentLayout, cartFrag).hide(cartFrag).commit();
+            fragMan.beginTransaction().add(R.id.fragmentLayout, accountFrag).hide(accountFrag).commit();
+            fragMan.beginTransaction().add(R.id.fragmentLayout, contactFrag).hide(contactFrag).commit();
+            fragMan.beginTransaction().add(R.id.fragmentLayout, aboutFrag).hide(aboutFrag).commit();
+
+
+//        }else {
+//
+//        }
+
+        context = this;
+        cartViewModel = ViewModelProviders.of((FragmentActivity) this).get(CartViewModel.class);
+        cartViewModel.getAllItems().observe(this, new Observer<List<CartItem>>() {
+            @Override
+            public void onChanged(List<CartItem> cartItems) {
+                int cartCount = cartItems.size();
+                if (cartCount > 0){
+                    showBadge(context,navigation,String.valueOf(cartCount));
+                }else {
+                    removeBadge(navigation,R.id.navigation_cart);
+                }
+            }
+        });
+    }
+
+    public static void showBadge(Context context, BottomNavigationView
+            bottomNavigationView, String value) {
+        BottomNavigationItemView itemView = bottomNavigationView.findViewById(R.id.navigation_cart);
+
+        View badge = LayoutInflater.from(context).inflate(R.layout.notification_badge, bottomNavigationView, false);
+
+        TextView text = badge.findViewById(R.id.badge_text_view);
+        text.setText(value);
+        itemView.addView(badge);
+    }
+
+    public static void removeBadge(BottomNavigationView bottomNavigationView, @IdRes int itemId) {
+        BottomNavigationItemView itemView = bottomNavigationView.findViewById(itemId);
+        int pos = itemView.getChildCount();
+        View firstView = itemView.getChildAt(0);
+        itemView.removeAllViews();
+        itemView.addView(firstView);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.appbar_nav, menu);
+
+        this.appBarMenu = menu;
+        contactItem = menu.getItem(0);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case R.id.navigation_contact:
+
+                //set icon to clicked
+                contactItem.setIcon(R.drawable.contactdefault);
+
+                //set other icons to not clicked
+                accountItem.setIcon(R.drawable.user_default);
+                homeItem.setIcon(R.drawable.homedefault);
+                storeItem.setIcon(R.drawable.storedefault);
+                cartItem.setIcon(R.drawable.cartdefault);
+
+                //load contact fragment
+                fragMan.beginTransaction().hide(active).show(contactFrag).commit();
+                active = contactFrag;
+
+                return true;
+            case R.id.navigation_settings:
+
+                return true;
+            case R.id.navigation_about:
+                contactItem.setIcon(R.drawable.contact_clicked);
+                accountItem.setIcon(R.drawable.user_default);
+                homeItem.setIcon(R.drawable.homedefault);
+                storeItem.setIcon(R.drawable.storedefault);
+                cartItem.setIcon(R.drawable.cartdefault);
+
+                //load about fragment
+                fragMan.beginTransaction().hide(active).show(aboutFrag).commit();
+                active = aboutFrag;
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -148,138 +288,5 @@ public class Home extends AppCompatActivity {
             return false;
         }
     };
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        setTheme(R.style.TreySplashTheme);
-
-        super.onCreate(savedInstanceState);
-
-        setTheme(R.style.TreyThreadsTheme);
-        setContentView(R.layout.activity_home);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-//        getSupportActionBar().setTitle("");
-
-
-        //fragment stuff
-//        FragmentManager fragmentManager = getSupportFragmentManager();
-//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//        HomeFragment homeFragment = new HomeFragment();
-//        fragmentTransaction.add(R.id.fragmentLayout,homeFragment);
-//        fragmentTransaction.commit();
-
-        navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
-        //set a null tint on the selected item
-        navigation.setItemIconTintList(null);
-
-        //get the items
-        homeItem = navigation.getMenu().getItem(0);
-        storeItem = navigation.getMenu().getItem(1);
-        cartItem = navigation.getMenu().getItem(2);
-        accountItem = navigation.getMenu().getItem(3);
-
-
-        //HomeFragment homeFragment = HomeFragment.newInstance("param1","param2");
-
-//        if (savedInstanceState == null) {
-            fragMan = getSupportFragmentManager();
-            fragMan.beginTransaction().add(R.id.fragmentLayout, homeFrag).commit();
-            active = homeFrag;
-
-            fragMan.beginTransaction().add(R.id.fragmentLayout, storeFrag).hide(storeFrag).commit();
-            fragMan.beginTransaction().add(R.id.fragmentLayout, cartFrag).hide(cartFrag).commit();
-            fragMan.beginTransaction().add(R.id.fragmentLayout, accountFrag).hide(accountFrag).commit();
-            fragMan.beginTransaction().add(R.id.fragmentLayout, contactFrag).hide(contactFrag).commit();
-            fragMan.beginTransaction().add(R.id.fragmentLayout, aboutFrag).hide(aboutFrag).commit();
-
-
-//        }else {
-//
-//        }
-
-        context = this;
-        cartViewModel = ViewModelProviders.of((FragmentActivity) this).get(CartViewModel.class);
-        cartViewModel.getAllItems().observe(this, new Observer<List<CartItem>>() {
-            @Override
-            public void onChanged(List<CartItem> cartItems) {
-                int cartCount = cartItems.size();
-                if (cartCount > 0){
-                    showBadge(context,navigation,R.id.navigation_cart,String.valueOf(cartCount));
-                }else {
-                    removeBadge(navigation,R.id.navigation_cart);
-                }
-            }
-        });
-    }
-
-    public static void showBadge(Context context, BottomNavigationView
-            bottomNavigationView, @IdRes int itemId, String value) {
-        BottomNavigationItemView itemView = bottomNavigationView.findViewById(itemId);
-        View badge = LayoutInflater.from(context).inflate(R.layout.notification_badge, bottomNavigationView, false);
-
-        TextView text = badge.findViewById(R.id.badge_text_view);
-        text.setText(value);
-        itemView.addView(badge);
-    }
-
-    public static void removeBadge(BottomNavigationView bottomNavigationView, @IdRes int itemId) {
-        BottomNavigationItemView itemView = bottomNavigationView.findViewById(itemId);
-        if (itemView.getChildCount() == 3) {
-            itemView.removeViewAt(2);
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu){
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.appbar_nav, menu);
-
-        this.appBarMenu = menu;
-        contactItem = menu.getItem(0);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        switch (item.getItemId()){
-            case R.id.navigation_contact:
-
-                //set icon to clicked
-                contactItem.setIcon(R.drawable.contactdefault);
-
-                //set other icons to not clicked
-                accountItem.setIcon(R.drawable.user_default);
-                homeItem.setIcon(R.drawable.homedefault);
-                storeItem.setIcon(R.drawable.storedefault);
-                cartItem.setIcon(R.drawable.cartdefault);
-
-                //load contact fragment
-                fragMan.beginTransaction().hide(active).show(contactFrag).commit();
-                active = contactFrag;
-
-                return true;
-            case R.id.navigation_settings:
-
-                return true;
-            case R.id.navigation_about:
-                contactItem.setIcon(R.drawable.contact_clicked);
-                accountItem.setIcon(R.drawable.user_default);
-                homeItem.setIcon(R.drawable.homedefault);
-                storeItem.setIcon(R.drawable.storedefault);
-                cartItem.setIcon(R.drawable.cartdefault);
-
-                //load about fragment
-                fragMan.beginTransaction().hide(active).show(aboutFrag).commit();
-                active = aboutFrag;
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
 
 }

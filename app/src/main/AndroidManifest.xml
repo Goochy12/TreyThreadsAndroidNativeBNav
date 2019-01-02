@@ -8,17 +8,16 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/trey"
+        android:label="@string/app_name"
         android:roundIcon="@mipmap/trey_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:ignore="GoogleAppIndexingWarning"
-        android:label="@string/app_name">
+        tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name="au.com.liamgooch.treythreads.Home"
-            android:theme="@style/TreySplashTheme"
+            android:name=".Home"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize"
-            >
+            android:theme="@style/TreySplashTheme"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,13 +31,11 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="au.com.liamgooch.treythreads.braintree" />
+                <data android:scheme="${applicationId}.braintree" />
             </intent-filter>
         </activity>
 
+        <activity android:name=".Checkout"></activity>
     </application>
 
-</manifest>
-
-<!--android:configChanges="orientation|screenSize"-->
-    <!--android:label="@string/app_name"-->
+</manifest> <!-- android:configChanges="orientation|screenSize" --><!-- android:label="@string/app_name" -->

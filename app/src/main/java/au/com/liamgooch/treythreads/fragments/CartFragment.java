@@ -1,6 +1,5 @@
 package au.com.liamgooch.treythreads.fragments;
 
-import android.app.Activity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
@@ -11,14 +10,14 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.braintreepayments.api.dropin.DropInActivity;
-import com.braintreepayments.api.dropin.DropInResult;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import au.com.liamgooch.treythreads.CartViewModel;
-import au.com.liamgooch.treythreads.PaymentProcessing;
+import au.com.liamgooch.treythreads.Checkout;
 import au.com.liamgooch.treythreads.R;
 import au.com.liamgooch.treythreads.recycler_adapters.cartRecAdpt;
 import au.com.liamgooch.treythreads.cart_data.CartItem;
@@ -50,7 +49,6 @@ public class CartFragment extends Fragment {
     private CartItemDatabase db;
     private CartViewModel cartViewModel;
 
-    public PaymentProcessing paymentProcessing;
     private static final int REQUEST_CODE = 1234;
 
     @Override
@@ -122,46 +120,16 @@ public class CartFragment extends Fragment {
             }
         });
 
-        //PAYMENT PROCESSING
+        checkoutButton = (Button) getActivity().findViewById(R.id.checkoutButton);
         checkoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                setupPaymentProcessing();
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(),Checkout.class);
+                intent.putExtra("CART_TOTAL",String.valueOf(cartRecyclerAdapter.getRunningTotal()));
+                startActivity(intent);
+
             }
         });
-
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
-                DropInResult result = data.getParcelableExtra(DropInResult.EXTRA_DROP_IN_RESULT);
-                // use the result to update your UI and send the payment method nonce to your server
-            } else if (resultCode == Activity.RESULT_CANCELED) {
-                // the user canceled
-            } else {
-                // handle errors here, an exception may be available in
-                Exception error = (Exception) data.getSerializableExtra(DropInActivity.EXTRA_ERROR);
-            }
-        }
-    }
-
-    public void setupPaymentProcessing(){
-        PaymentProcessing paymentProcessing = new PaymentProcessing(getActivity());
-        paymentProcessing.setupBraintreeAndStartExpressCheckout(String.valueOf(cartRecyclerAdapter.getRunningTotal()));
-    }
-
 
 }
